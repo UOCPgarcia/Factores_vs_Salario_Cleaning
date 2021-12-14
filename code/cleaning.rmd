@@ -1,0 +1,39 @@
+---
+title: "Limpieza y análisis de datos"
+author: "Adrià Cortés Andrés - MPilar García Ruiz"
+date: "14/12/2021"
+output:
+  html_document:
+    toc: yes
+    toc_depth: '4'
+    df_print: paged
+lang: es-ES
+---
+
+## 0.- Preliminares
+
+#### Directorio por defecto
+
+```{r warning=FALSE}
+
+setwd('C:/Users/MPilar/Documents/GitHub/Factores_vs_Salario_Cleaning/code')
+
+```
+    
+#### Lectura del fichero    
+```{r}
+datos <- read.csv ("C:/Users/MPilar/Documents/GitHub/Factores_vs_Salario_Cleaning/data/adult_data.csv", 
+                   sep = ",", 
+                   stringsAsFactors = TRUE)
+
+```
+    
+#### Características de las variables leídas    
+```{r}
+dim (datos)
+str (datos)
+```
+
+
+
+
