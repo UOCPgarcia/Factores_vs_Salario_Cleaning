@@ -33,7 +33,7 @@ setwd('C:/Users/MPilar/Documents/GitHub/Factores_vs_Salario_Cleaning/code')
 #### Lectura del fichero    
     
 ```{r}
-datos <- read.csv ("C:/Users/MPilar/Documents/GitHub/Factores_vs_Salario_Cleaning/data/adult_data.csv", 
+datos_ini <- read.csv ("C:/Users/MPilar/Documents/GitHub/Factores_vs_Salario_Cleaning/data/adult_data.csv", 
                    sep = ",", 
                    stringsAsFactors = TRUE)
 
@@ -42,15 +42,25 @@ datos <- read.csv ("C:/Users/MPilar/Documents/GitHub/Factores_vs_Salario_Cleanin
 #### Dimensión del conjunto de datos    
     
 ```{r}
-dim (datos)
+dim (datos_ini)
 ```
     
 #### Características de las variables leídas    
     
 ```{r}
-str (datos)
+str (datos_ini)
 ```
+
+#### Se eliminan las variables que bajo nuestro punto de vista no aportan información para nuestro estudio     
     
+```{r}
+datos <- select (datos_ini, 
+                 -fnlwgt, 
+                 -capital.gain,
+                 -capital.loss)
+
+```
+
 #### Inclusión de una variable secuencial como identificador único de cada fila. Reordenación de columnas.    
     
 ```{r}

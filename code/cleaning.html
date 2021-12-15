@@ -176,15 +176,24 @@ pre code {
 <ul>
 <li><a href="#preliminares">0.- Preliminares</a>
 <ul>
+<li><a href="#paquetes-utilizados">Paquetes utilizados</a></li>
 <li><a href="#directorio-por-defecto">Directorio por defecto</a></li>
 <li><a href="#lectura-del-fichero">Lectura del fichero</a></li>
+<li><a href="#dimensión-del-conjunto-de-datos">Dimensión del conjunto de datos</a></li>
 <li><a href="#características-de-las-variables-leídas">Características de las variables leídas</a></li>
+<li><a href="#inclusión-de-una-variable-secuencial-como-identificador-único-de-cada-fila.-reordenación-de-columnas.">Inclusión de una variable secuencial como identificador único de cada fila. Reordenación de columnas.</a></li>
+<li><a href="#la-segmentación-por-rangos-de-edad-te-permite-establecer-nichos-más-concretos-y-a-profundizar-en-el-estudio.">La segmentación por rangos de edad te permite establecer nichos más concretos y a profundizar en el estudio.</a></li>
 </ul></li>
 </ul>
 </div>
 
 <div id="preliminares" class="section level2">
 <h2>0.- Preliminares</h2>
+<div id="paquetes-utilizados" class="section level4">
+<h4>Paquetes utilizados</h4>
+<p>Se cargan fuera del rmarkdown, por problemas al ejecutar Knit. La instalación de una librería seguiría los siguientes pasos 1) install.packages(‘dplyr’) 2) library (‘dplyr’)</p>
+<p>Paquetes utilizados * dplyr (manejo de dataframes)</p>
+</div>
 <div id="directorio-por-defecto" class="section level4">
 <h4>Directorio por defecto</h4>
 <pre class="r"><code>setwd(&#39;C:/Users/MPilar/Documents/GitHub/Factores_vs_Salario_Cleaning/code&#39;)</code></pre>
@@ -195,10 +204,13 @@ pre code {
                    sep = &quot;,&quot;, 
                    stringsAsFactors = TRUE)</code></pre>
 </div>
-<div id="características-de-las-variables-leídas" class="section level4">
-<h4>Características de las variables leídas</h4>
+<div id="dimensión-del-conjunto-de-datos" class="section level4">
+<h4>Dimensión del conjunto de datos</h4>
 <pre class="r"><code>dim (datos)</code></pre>
 <pre><code>## [1] 32561    15</code></pre>
+</div>
+<div id="características-de-las-variables-leídas" class="section level4">
+<h4>Características de las variables leídas</h4>
 <pre class="r"><code>str (datos)</code></pre>
 <pre><code>## &#39;data.frame&#39;:    32561 obs. of  15 variables:
 ##  $ age           : int  39 50 38 53 28 37 49 52 31 42 ...
@@ -216,7 +228,66 @@ pre code {
 ##  $ hours.per.week: int  40 13 40 40 40 40 16 45 50 40 ...
 ##  $ native.country: Factor w/ 42 levels &quot; ?&quot;,&quot; Cambodia&quot;,..: 40 40 40 40 6 40 24 40 40 40 ...
 ##  $ salary        : Factor w/ 2 levels &quot; &lt;=50K&quot;,&quot; &gt;50K&quot;: 1 1 1 1 1 1 1 2 2 2 ...</code></pre>
-<p>datos &lt;- read.csv(“train3.csv”, sep=“;”, stringsAsFactors=TRUE)</p>
+</div>
+<div id="inclusión-de-una-variable-secuencial-como-identificador-único-de-cada-fila.-reordenación-de-columnas." class="section level4">
+<h4>Inclusión de una variable secuencial como identificador único de cada fila. Reordenación de columnas.</h4>
+<pre class="r"><code>filas &lt;- nrow (datos)
+
+datos &lt;- cbind (datos, &#39;id&#39; = 1:filas)
+
+names (datos)</code></pre>
+<pre><code>##  [1] &quot;age&quot;            &quot;workclass&quot;      &quot;fnlwgt&quot;         &quot;education&quot;     
+##  [5] &quot;education.num&quot;  &quot;marital.status&quot; &quot;occupation&quot;     &quot;relationship&quot;  
+##  [9] &quot;race&quot;           &quot;sex&quot;            &quot;capital.gain&quot;   &quot;capital.loss&quot;  
+## [13] &quot;hours.per.week&quot; &quot;native.country&quot; &quot;salary&quot;         &quot;id&quot;</code></pre>
+<pre class="r"><code>datos &lt;- subset (datos,
+                 select = c(13,
+                            1,
+                            2,
+                            3,
+                            4,
+                            5,
+                            6,
+                            7,
+                            8,
+                            9,
+                            10,
+                            11,
+                            12))
+
+names (datos)</code></pre>
+<pre><code>##  [1] &quot;hours.per.week&quot; &quot;age&quot;            &quot;workclass&quot;      &quot;fnlwgt&quot;        
+##  [5] &quot;education&quot;      &quot;education.num&quot;  &quot;marital.status&quot; &quot;occupation&quot;    
+##  [9] &quot;relationship&quot;   &quot;race&quot;           &quot;sex&quot;            &quot;capital.gain&quot;  
+## [13] &quot;capital.loss&quot;</code></pre>
+</div>
+<div id="la-segmentación-por-rangos-de-edad-te-permite-establecer-nichos-más-concretos-y-a-profundizar-en-el-estudio." class="section level4">
+<h4>La segmentación por rangos de edad te permite establecer nichos más concretos y a profundizar en el estudio.</h4>
+<p>Establecimiento de categorías de edad para el estudio de empleabilidad vs salario en escalas<br />
+* 0 a 16 años, cat_0<br />
+* 17 a 20, cat_1<br />
+* 21 a 34, cat_2<br />
+* 35 a 45, cat_3<br />
+* 46 a 65, cat_4<br />
+* 65 ~, cat_5</p>
+<p>Fuente <a href="https://www.redalyc.org/journal/706/70666127005/html/" class="uri">https://www.redalyc.org/journal/706/70666127005/html/</a></p>
+<pre class="r"><code>datos &lt;- cbind (datos,
+                age_cat = cut (datos$age,
+                               breaks = c(0,
+                                          16,
+                                          20,
+                                          34,
+                                          45,
+                                          65,
+                                          150),
+                               labels = c(&quot;cat_0&quot;,
+                                          &quot;cat_1&quot;,
+                                          &quot;cat_2&quot;,
+                                          &quot;cat_3&quot;,
+                                          &quot;cat_4&quot;,
+                                          &quot;cat_5&quot;),
+                               right = TRUE
+                               ))</code></pre>
 </div>
 </div>
 
