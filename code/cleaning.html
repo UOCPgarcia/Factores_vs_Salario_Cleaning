@@ -178,6 +178,23 @@ pre code {
 <ul>
 <li><a href="#miembros-del-equipo">Miembros del equipo</a></li>
 </ul></li>
+<li><a href="#descripción-del-dataset.-por-qué-es-importante-y-qué-preguntaproblema-pretende-responder">1.- Descripción del dataset. ¿Por qué es importante y qué pregunta/problema pretende responder?</a></li>
+<li><a href="#integración-y-selección-de-los-datos-de-interés-a-analizar.">2.- Integración y selección de los datos de interés a analizar.</a></li>
+<li><a href="#limpieza-de-los-datos.">3.- Limpieza de los datos.</a>
+<ul>
+<li><a href="#los-datos-contienen-ceros-o-elementos-vacíos-cómo-gestionarías-cada-uno-de-estos-casos">3.1.- ¿Los datos contienen ceros o elementos vacíos? ¿Cómo gestionarías cada uno de estos casos?</a></li>
+<li><a href="#identificación-y-tratamiento-de-valores-extremos.">3.2.- Identificación y tratamiento de valores extremos.</a></li>
+</ul></li>
+<li><a href="#análisis-de-los-datos.">4.- Análisis de los datos.</a>
+<ul>
+<li><a href="#selección-de-los-grupos-de-datos-que-se-quieren-analizarcomparar-planificación-de-los-análisis-a-aplicar.">4.1.- Selección de los grupos de datos que se quieren analizar/comparar (planificación de los análisis a aplicar).</a></li>
+<li><a href="#comprobación-de-la-normalidad-y-homogeneidad-de-la-varianza.">4.2.- Comprobación de la normalidad y homogeneidad de la varianza.</a></li>
+<li><a href="#aplicación-de-pruebas-estadísticas-para-comparar-los-grupos-de-datos.-en-función-de-los-datos-y-el-objetivo-del-estudio-aplicar-pruebas-de-contraste-de-hipótesis-correlaciones-regresiones-etc.-aplicar-al-menos-tres-métodos-de-análisis-diferentes.">4.3.- Aplicación de pruebas estadísticas para comparar los grupos de datos. En función de los datos y el objetivo del estudio, aplicar pruebas de contraste de hipótesis, correlaciones, regresiones, etc. Aplicar al menos tres métodos de análisis diferentes.</a></li>
+</ul></li>
+<li><a href="#representación-de-los-resultados-a-partir-de-tablas-y-gráficas.">5.- Representación de los resultados a partir de tablas y gráficas.</a></li>
+<li><a href="#resolución-del-problema.-a-partir-de-los-resultados-obtenidos-cuáles-son-las-conclusiones-los-resultados-permiten-responder-al-problema">6. Resolución del problema. A partir de los resultados obtenidos, ¿cuáles son las conclusiones? ¿Los resultados permiten responder al problema?</a></li>
+<li><a href="#código-hay-que-adjuntar-el-código-preferiblemente-en-r-con-el-que-se-ha-realizado-la-limpieza-análisis-y-representación-de-los-datos.-si-lo-preferís-también-podéis-trabajar-en-python.">7. Código: Hay que adjuntar el código, preferiblemente en R, con el que se ha realizado la limpieza, análisis y representación de los datos. Si lo preferís, también podéis trabajar en Python.</a></li>
+<li><a href="#section">————————————————————————-</a></li>
 </ul>
 </div>
 
@@ -192,7 +209,10 @@ pre code {
 </li>
 <li>María Pilar Garcia Ruiz</li>
 </ul>
-<p>##1.- Descripción del dataset. ¿Por qué es importante y qué pregunta/problema pretende responder?</p>
+</div>
+</div>
+<div id="descripción-del-dataset.-por-qué-es-importante-y-qué-preguntaproblema-pretende-responder" class="section level2">
+<h2>1.- Descripción del dataset. ¿Por qué es importante y qué pregunta/problema pretende responder?</h2>
 <p>El conjunto de datos ha sido obtenido de la plataforma kaggle, en la url</p>
 <p>[Kaggle: Your Machine Learning and Data Science Community] <a href="https://www.kaggle.com/ddmasterdon/income-adult?select=adult_data.csv" class="uri">https://www.kaggle.com/ddmasterdon/income-adult?select=adult_data.csv</a></p>
 <p>Las variables con las que cuenta el dataset son las siguientes:</p>
@@ -288,7 +308,9 @@ pre code {
 </tbody>
 </table>
 <p>Se escoge este dataset para ver si se puede estudiar qué salario puede alcanzar una persona en base a su pertenencia a un grupo demográfico, con las características descritas en el conjunto de datos. Se establece el estudio en torno a un umbral salarial predeterminado. Las personas que no alcanzan un determinado umbral de sueldo tienen una peor calidad de vida, se encuentran con más dificultad para hacer frente a cualquier eventualidad negativa y esto provoca otras consecuencias. Determinados grupos demográficos pueden convertirse en colectivos más vulnerables de la sociedad. Factores como la raza, el sexo, el nivel de estudios… etc pueden verse con un techo salarial y verse más afectados frente a las crisis económicas.</p>
-<p>##2.- Integración y selección de los datos de interés a analizar.</p>
+</div>
+<div id="integración-y-selección-de-los-datos-de-interés-a-analizar." class="section level2">
+<h2>2.- Integración y selección de los datos de interés a analizar.</h2>
 <p>Se inicia la práctica con la lectura del ficheron de datos. Para ello, cargaremos los paquetes necesarios, cuyo número puede irse incrementando conforme avance el desarrollo de la práctica.</p>
 <div id="paquetes-utilizados" class="section level4">
 <h4>Paquetes utilizados</h4>
@@ -351,6 +373,12 @@ pre code {
 {"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["age"],"name":[1],"type":["int"],"align":["right"]},{"label":["workclass"],"name":[2],"type":["chr"],"align":["left"]},{"label":["fnlwgt"],"name":[3],"type":["int"],"align":["right"]},{"label":["education"],"name":[4],"type":["chr"],"align":["left"]},{"label":["education.num"],"name":[5],"type":["int"],"align":["right"]},{"label":["marital.status"],"name":[6],"type":["chr"],"align":["left"]},{"label":["occupation"],"name":[7],"type":["chr"],"align":["left"]},{"label":["relationship"],"name":[8],"type":["chr"],"align":["left"]},{"label":["race"],"name":[9],"type":["chr"],"align":["left"]},{"label":["sex"],"name":[10],"type":["chr"],"align":["left"]},{"label":["capital.gain"],"name":[11],"type":["int"],"align":["right"]},{"label":["capital.loss"],"name":[12],"type":["int"],"align":["right"]},{"label":["hours.per.week"],"name":[13],"type":["int"],"align":["right"]},{"label":["native.country"],"name":[14],"type":["chr"],"align":["left"]},{"label":["salary"],"name":[15],"type":["chr"],"align":["left"]}],"data":[{"1":"22","2":"Private","3":"310152","4":"Some-college","5":"10","6":"Never-married","7":"Protective-serv","8":"Not-in-family","9":"White","10":"Male","11":"0","12":"0","13":"40","14":"United-States","15":"<=50K","_rn_":"32556"},{"1":"27","2":"Private","3":"257302","4":"Assoc-acdm","5":"12","6":"Married-civ-spouse","7":"Tech-support","8":"Wife","9":"White","10":"Female","11":"0","12":"0","13":"38","14":"United-States","15":"<=50K","_rn_":"32557"},{"1":"40","2":"Private","3":"154374","4":"HS-grad","5":"9","6":"Married-civ-spouse","7":"Machine-op-inspct","8":"Husband","9":"White","10":"Male","11":"0","12":"0","13":"40","14":"United-States","15":">50K","_rn_":"32558"},{"1":"58","2":"Private","3":"151910","4":"HS-grad","5":"9","6":"Widowed","7":"Adm-clerical","8":"Unmarried","9":"White","10":"Female","11":"0","12":"0","13":"40","14":"United-States","15":"<=50K","_rn_":"32559"},{"1":"22","2":"Private","3":"201490","4":"HS-grad","5":"9","6":"Never-married","7":"Adm-clerical","8":"Own-child","9":"White","10":"Male","11":"0","12":"0","13":"20","14":"United-States","15":"<=50K","_rn_":"32560"},{"1":"52","2":"Self-emp-inc","3":"287927","4":"HS-grad","5":"9","6":"Married-civ-spouse","7":"Exec-managerial","8":"Wife","9":"White","10":"Female","11":"15024","12":"0","13":"40","14":"United-States","15":">50K","_rn_":"32561"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
+</div>
+</div>
+<div id="limpieza-de-los-datos." class="section level2">
+<h2>3.- Limpieza de los datos.</h2>
+<div id="los-datos-contienen-ceros-o-elementos-vacíos-cómo-gestionarías-cada-uno-de-estos-casos" class="section level3">
+<h3>3.1.- ¿Los datos contienen ceros o elementos vacíos? ¿Cómo gestionarías cada uno de estos casos?</h3>
 <p>Revisión de las variables para su análisis y limpieza</p>
 <pre class="r"><code>table (datos$age)</code></pre>
 <pre><code>## 
@@ -578,10 +606,34 @@ datos$sex &lt;- trimws(datos$sex,
                     which = c(&quot;left&quot;))
 datos$salary &lt;- trimws(datos$salary, 
                       which = c(&quot;left&quot;))</code></pre>
-<p>Se localizan valores ‘?’ en el dataset que pasamos a considerar valores na (Not Available), para después ser eliminados.</p>
-<pre class="r"><code>datos$workclass [which(datos$workclass == &quot;?&quot;)] &lt;- NA</code></pre>
-<p>No se encuentran en este dataset, pero sí se localizan caracteres</p>
 </div>
+<div id="identificación-y-tratamiento-de-valores-extremos." class="section level3">
+<h3>3.2.- Identificación y tratamiento de valores extremos.</h3>
+</div>
+</div>
+<div id="análisis-de-los-datos." class="section level2">
+<h2>4.- Análisis de los datos.</h2>
+<div id="selección-de-los-grupos-de-datos-que-se-quieren-analizarcomparar-planificación-de-los-análisis-a-aplicar." class="section level3">
+<h3>4.1.- Selección de los grupos de datos que se quieren analizar/comparar (planificación de los análisis a aplicar).</h3>
+</div>
+<div id="comprobación-de-la-normalidad-y-homogeneidad-de-la-varianza." class="section level3">
+<h3>4.2.- Comprobación de la normalidad y homogeneidad de la varianza.</h3>
+</div>
+<div id="aplicación-de-pruebas-estadísticas-para-comparar-los-grupos-de-datos.-en-función-de-los-datos-y-el-objetivo-del-estudio-aplicar-pruebas-de-contraste-de-hipótesis-correlaciones-regresiones-etc.-aplicar-al-menos-tres-métodos-de-análisis-diferentes." class="section level3">
+<h3>4.3.- Aplicación de pruebas estadísticas para comparar los grupos de datos. En función de los datos y el objetivo del estudio, aplicar pruebas de contraste de hipótesis, correlaciones, regresiones, etc. Aplicar al menos tres métodos de análisis diferentes.</h3>
+</div>
+</div>
+<div id="representación-de-los-resultados-a-partir-de-tablas-y-gráficas." class="section level2">
+<h2>5.- Representación de los resultados a partir de tablas y gráficas.</h2>
+</div>
+<div id="resolución-del-problema.-a-partir-de-los-resultados-obtenidos-cuáles-son-las-conclusiones-los-resultados-permiten-responder-al-problema" class="section level2">
+<h2>6. Resolución del problema. A partir de los resultados obtenidos, ¿cuáles son las conclusiones? ¿Los resultados permiten responder al problema?</h2>
+</div>
+<div id="código-hay-que-adjuntar-el-código-preferiblemente-en-r-con-el-que-se-ha-realizado-la-limpieza-análisis-y-representación-de-los-datos.-si-lo-preferís-también-podéis-trabajar-en-python." class="section level2">
+<h2>7. Código: Hay que adjuntar el código, preferiblemente en R, con el que se ha realizado la limpieza, análisis y representación de los datos. Si lo preferís, también podéis trabajar en Python.</h2>
+</div>
+<div id="section" class="section level2">
+<h2>————————————————————————-</h2>
 <div id="inclusión-de-una-variable-secuencial-como-identificador-único-de-cada-fila.-reordenación-de-columnas." class="section level4">
 <h4>Inclusión de una variable secuencial como identificador único de cada fila. Reordenación de columnas.</h4>
 <pre class="r"><code>filas &lt;- nrow (datos)
@@ -641,7 +693,6 @@ names (datos)</code></pre>
                                           &quot;cat_5&quot;),
                                right = TRUE
                                ))</code></pre>
-</div>
 </div>
 </div>
 
