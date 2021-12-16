@@ -176,26 +176,143 @@ pre code {
 <ul>
 <li><a href="#preliminares">0.- Preliminares</a>
 <ul>
-<li><a href="#paquetes-utilizados">Paquetes utilizados</a></li>
+<li><a href="#miembros-del-equipo">Miembros del equipo</a></li>
 </ul></li>
 </ul>
 </div>
 
 <div id="preliminares" class="section level2">
 <h2>0.- Preliminares</h2>
-<div id="paquetes-utilizados" class="section level3">
-<h3>Paquetes utilizados</h3>
-<p>Se cargan fuera del rmarkdown, por problemas al ejecutar Knit. La instalación de una librería seguiría los siguientes pasos 1) install.packages(‘dplyr’) 2) library (‘dplyr’)</p>
-<p>Paquetes utilizados * dplyr (manejo de dataframes)</p>
+<p>Esta práctica se ha realizado bajo el contexto de la asignatura Tipología y ciclo de vida de los datos (M2.851), perteneciente al Máster en Ciencia de Datos de la Universitat Oberta de Catalunya (UOC). En ella, se aplican técnicas de limpieza y análisis de datos mediante el lenguaje de programación R con el fin de limpiar y analizar un conjunto de datos para después estudiar la probabilidad de alcanzar (o no) cierto umbral de salario en base a los factores personales descritos en el dataset.</p>
+<div id="miembros-del-equipo" class="section level3">
+<h3>Miembros del equipo</h3>
+<p>El proyecto ha sido realizado de forma conjunta por:</p>
+<ul>
+<li>Adrià Cortés Andrés<br />
+</li>
+<li>María Pilar Garcia Ruiz</li>
+</ul>
+<p>##1.- Descripción del dataset. ¿Por qué es importante y qué pregunta/problema pretende responder?</p>
+<p>El conjunto de datos ha sido obtenido de la plataforma kaggle, en la url</p>
+<p>[Kaggle: Your Machine Learning and Data Science Community] <a href="https://www.kaggle.com/ddmasterdon/income-adult?select=adult_data.csv" class="uri">https://www.kaggle.com/ddmasterdon/income-adult?select=adult_data.csv</a></p>
+<p>Las variables con las que cuenta el dataset son las siguientes:</p>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">Variables</th>
+<th align="center">Tipo</th>
+<th align="center">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">Age</td>
+<td align="center">Numérico</td>
+<td align="center">Edad de la persona</td>
+</tr>
+<tr class="even">
+<td align="center">workclass</td>
+<td align="center">Texto</td>
+<td align="center">Clase de empleado. Campo categorizado.</td>
+</tr>
+<tr class="odd">
+<td align="center">fnlwgt</td>
+<td align="center">Numérico</td>
+<td align="center">Peso final dado por la oficina que ha recogido los datos y que da el número de unidades en la población objetivo en base a una fórmula no facilitada-</td>
+</tr>
+<tr class="even">
+<td align="center">education</td>
+<td align="center">Texto</td>
+<td align="center">Nivel de estudios. Campo categorizado</td>
+</tr>
+<tr class="odd">
+<td align="center">education-num</td>
+<td align="center">Texto</td>
+<td align="center">Años dedicados a los estudios</td>
+</tr>
+<tr class="even">
+<td align="center">marital-status</td>
+<td align="center">Texto</td>
+<td align="center">Situación sentimental. Campo categorizado</td>
+</tr>
+<tr class="odd">
+<td align="center">occupation</td>
+<td align="center">Texto</td>
+<td align="center">Trabajo actual</td>
+</tr>
+<tr class="even">
+<td align="center">relationship</td>
+<td align="center">Texto</td>
+<td align="center">Relación familiar actual. Campo categorizado</td>
+</tr>
+<tr class="odd">
+<td align="center">race</td>
+<td align="center">Texto</td>
+<td align="center">Raza. Campo categorizado</td>
+</tr>
+<tr class="even">
+<td align="center">sex</td>
+<td align="center">Texto</td>
+<td align="center">Sexo. Campo categorizado</td>
+</tr>
+<tr class="odd">
+<td align="center">capital-gain</td>
+<td align="center">Numérico</td>
+<td align="center">Ganancia de capital</td>
+</tr>
+<tr class="even">
+<td align="center">capital-loss</td>
+<td align="center">Numérico</td>
+<td align="center">Pérdida de capital</td>
+</tr>
+<tr class="odd">
+<td align="center">hours-per-week</td>
+<td align="center">Numérico</td>
+<td align="center">Horas de trabajo por semana</td>
+</tr>
+<tr class="even">
+<td align="center">native-country</td>
+<td align="center">Texto</td>
+<td align="center">Nacionalidad. Campo categorizado</td>
+</tr>
+<tr class="odd">
+<td align="center">salary</td>
+<td align="center">Lógico</td>
+<td align="center">Salario</td>
+</tr>
+</tbody>
+</table>
+<p>Se escoge este dataset para ver si se puede estudiar qué salario puede alcanzar una persona en base a su pertenencia a un grupo demográfico, con las características descritas en el conjunto de datos. Se establece el estudio en torno a un umbral salarial predeterminado. Las personas que no alcanzan un determinado umbral de sueldo tienen una peor calidad de vida, se encuentran con más dificultad para hacer frente a cualquier eventualidad negativa y esto provoca otras consecuencias. Determinados grupos demográficos pueden convertirse en colectivos más vulnerables de la sociedad. Factores como la raza, el sexo, el nivel de estudios… etc pueden verse con un techo salarial y verse más afectados frente a las crisis económicas.</p>
+<p>##2.- Integración y selección de los datos de interés a analizar.</p>
+<p>Se inicia la práctica con la lectura del ficheron de datos. Para ello, cargaremos los paquetes necesarios, cuyo número puede irse incrementando conforme avance el desarrollo de la práctica.</p>
+<div id="paquetes-utilizados" class="section level4">
+<h4>Paquetes utilizados</h4>
+<p>Se cargan fuera del rmarkdown, por problemas al ejecutar Knit. La instalación de una librería seguiría los siguientes pasos (ejemplo)</p>
+<ol style="list-style-type: decimal">
+<li>install.packages(‘dplyr’)<br />
+</li>
+<li>library (‘dplyr’)</li>
+</ol>
+<p>Paquetes utilizados en esta práctica</p>
+<ul>
+<li>dplyr (manejo de dataframes)</li>
+</ul>
+</div>
 <div id="directorio-por-defecto" class="section level4">
 <h4>Directorio por defecto</h4>
 <pre class="r"><code>setwd(&#39;C:/Users/MPilar/Documents/GitHub/Factores_vs_Salario_Cleaning/code&#39;)</code></pre>
 </div>
 <div id="lectura-del-fichero" class="section level4">
 <h4>Lectura del fichero</h4>
+<p>Se realiza la lectura con la función read.csv, indicando la coma como carácter separador y diciéndole que contamos con una primera fila de cabecera de columnas. A su vez, para mejorar la gestión de los datos, indicamos que las columnas de cadenas de caracteres, visualizados los datos, sean consideradas como tipo factor.</p>
 <pre class="r"><code>datos &lt;- read.csv (&quot;C:/Users/MPilar/Documents/GitHub/Factores_vs_Salario_Cleaning/data/adult_data.csv&quot;, 
                    sep = &quot;,&quot;, 
-                   stringsAsFactors = TRUE)</code></pre>
+                   header = TRUE)</code></pre>
 </div>
 <div id="dimensión-del-conjunto-de-datos" class="section level4">
 <h4>Dimensión del conjunto de datos</h4>
@@ -207,20 +324,263 @@ pre code {
 <pre class="r"><code>str (datos)</code></pre>
 <pre><code>## &#39;data.frame&#39;:    32561 obs. of  15 variables:
 ##  $ age           : int  39 50 38 53 28 37 49 52 31 42 ...
-##  $ workclass     : Factor w/ 9 levels &quot; ?&quot;,&quot; Federal-gov&quot;,..: 8 7 5 5 5 5 5 7 5 5 ...
+##  $ workclass     : chr  &quot; State-gov&quot; &quot; Self-emp-not-inc&quot; &quot; Private&quot; &quot; Private&quot; ...
 ##  $ fnlwgt        : int  77516 83311 215646 234721 338409 284582 160187 209642 45781 159449 ...
-##  $ education     : Factor w/ 16 levels &quot; 10th&quot;,&quot; 11th&quot;,..: 10 10 12 2 10 13 7 12 13 10 ...
+##  $ education     : chr  &quot; Bachelors&quot; &quot; Bachelors&quot; &quot; HS-grad&quot; &quot; 11th&quot; ...
 ##  $ education.num : int  13 13 9 7 13 14 5 9 14 13 ...
-##  $ marital.status: Factor w/ 7 levels &quot; Divorced&quot;,&quot; Married-AF-spouse&quot;,..: 5 3 1 3 3 3 4 3 5 3 ...
-##  $ occupation    : Factor w/ 15 levels &quot; ?&quot;,&quot; Adm-clerical&quot;,..: 2 5 7 7 11 5 9 5 11 5 ...
-##  $ relationship  : Factor w/ 6 levels &quot; Husband&quot;,&quot; Not-in-family&quot;,..: 2 1 2 1 6 6 2 1 2 1 ...
-##  $ race          : Factor w/ 5 levels &quot; Amer-Indian-Eskimo&quot;,..: 5 5 5 3 3 5 3 5 5 5 ...
-##  $ sex           : Factor w/ 2 levels &quot; Female&quot;,&quot; Male&quot;: 2 2 2 2 1 1 1 2 1 2 ...
+##  $ marital.status: chr  &quot; Never-married&quot; &quot; Married-civ-spouse&quot; &quot; Divorced&quot; &quot; Married-civ-spouse&quot; ...
+##  $ occupation    : chr  &quot; Adm-clerical&quot; &quot; Exec-managerial&quot; &quot; Handlers-cleaners&quot; &quot; Handlers-cleaners&quot; ...
+##  $ relationship  : chr  &quot; Not-in-family&quot; &quot; Husband&quot; &quot; Not-in-family&quot; &quot; Husband&quot; ...
+##  $ race          : chr  &quot; White&quot; &quot; White&quot; &quot; White&quot; &quot; Black&quot; ...
+##  $ sex           : chr  &quot; Male&quot; &quot; Male&quot; &quot; Male&quot; &quot; Male&quot; ...
 ##  $ capital.gain  : int  2174 0 0 0 0 0 0 0 14084 5178 ...
 ##  $ capital.loss  : int  0 0 0 0 0 0 0 0 0 0 ...
 ##  $ hours.per.week: int  40 13 40 40 40 40 16 45 50 40 ...
-##  $ native.country: Factor w/ 42 levels &quot; ?&quot;,&quot; Cambodia&quot;,..: 40 40 40 40 6 40 24 40 40 40 ...
-##  $ salary        : Factor w/ 2 levels &quot; &lt;=50K&quot;,&quot; &gt;50K&quot;: 1 1 1 1 1 1 1 2 2 2 ...</code></pre>
+##  $ native.country: chr  &quot; United-States&quot; &quot; United-States&quot; &quot; United-States&quot; &quot; United-States&quot; ...
+##  $ salary        : chr  &quot; &lt;=50K&quot; &quot; &lt;=50K&quot; &quot; &lt;=50K&quot; &quot; &lt;=50K&quot; ...</code></pre>
+<p>Se incluyen como ejemplo las primeras filas del dataset y las últimas para ilustrar los datos con los que contamos.</p>
+<pre class="r"><code>head (datos)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["age"],"name":[1],"type":["int"],"align":["right"]},{"label":["workclass"],"name":[2],"type":["chr"],"align":["left"]},{"label":["fnlwgt"],"name":[3],"type":["int"],"align":["right"]},{"label":["education"],"name":[4],"type":["chr"],"align":["left"]},{"label":["education.num"],"name":[5],"type":["int"],"align":["right"]},{"label":["marital.status"],"name":[6],"type":["chr"],"align":["left"]},{"label":["occupation"],"name":[7],"type":["chr"],"align":["left"]},{"label":["relationship"],"name":[8],"type":["chr"],"align":["left"]},{"label":["race"],"name":[9],"type":["chr"],"align":["left"]},{"label":["sex"],"name":[10],"type":["chr"],"align":["left"]},{"label":["capital.gain"],"name":[11],"type":["int"],"align":["right"]},{"label":["capital.loss"],"name":[12],"type":["int"],"align":["right"]},{"label":["hours.per.week"],"name":[13],"type":["int"],"align":["right"]},{"label":["native.country"],"name":[14],"type":["chr"],"align":["left"]},{"label":["salary"],"name":[15],"type":["chr"],"align":["left"]}],"data":[{"1":"39","2":"State-gov","3":"77516","4":"Bachelors","5":"13","6":"Never-married","7":"Adm-clerical","8":"Not-in-family","9":"White","10":"Male","11":"2174","12":"0","13":"40","14":"United-States","15":"<=50K","_rn_":"1"},{"1":"50","2":"Self-emp-not-inc","3":"83311","4":"Bachelors","5":"13","6":"Married-civ-spouse","7":"Exec-managerial","8":"Husband","9":"White","10":"Male","11":"0","12":"0","13":"13","14":"United-States","15":"<=50K","_rn_":"2"},{"1":"38","2":"Private","3":"215646","4":"HS-grad","5":"9","6":"Divorced","7":"Handlers-cleaners","8":"Not-in-family","9":"White","10":"Male","11":"0","12":"0","13":"40","14":"United-States","15":"<=50K","_rn_":"3"},{"1":"53","2":"Private","3":"234721","4":"11th","5":"7","6":"Married-civ-spouse","7":"Handlers-cleaners","8":"Husband","9":"Black","10":"Male","11":"0","12":"0","13":"40","14":"United-States","15":"<=50K","_rn_":"4"},{"1":"28","2":"Private","3":"338409","4":"Bachelors","5":"13","6":"Married-civ-spouse","7":"Prof-specialty","8":"Wife","9":"Black","10":"Female","11":"0","12":"0","13":"40","14":"Cuba","15":"<=50K","_rn_":"5"},{"1":"37","2":"Private","3":"284582","4":"Masters","5":"14","6":"Married-civ-spouse","7":"Exec-managerial","8":"Wife","9":"White","10":"Female","11":"0","12":"0","13":"40","14":"United-States","15":"<=50K","_rn_":"6"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<pre class="r"><code>tail (datos)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["age"],"name":[1],"type":["int"],"align":["right"]},{"label":["workclass"],"name":[2],"type":["chr"],"align":["left"]},{"label":["fnlwgt"],"name":[3],"type":["int"],"align":["right"]},{"label":["education"],"name":[4],"type":["chr"],"align":["left"]},{"label":["education.num"],"name":[5],"type":["int"],"align":["right"]},{"label":["marital.status"],"name":[6],"type":["chr"],"align":["left"]},{"label":["occupation"],"name":[7],"type":["chr"],"align":["left"]},{"label":["relationship"],"name":[8],"type":["chr"],"align":["left"]},{"label":["race"],"name":[9],"type":["chr"],"align":["left"]},{"label":["sex"],"name":[10],"type":["chr"],"align":["left"]},{"label":["capital.gain"],"name":[11],"type":["int"],"align":["right"]},{"label":["capital.loss"],"name":[12],"type":["int"],"align":["right"]},{"label":["hours.per.week"],"name":[13],"type":["int"],"align":["right"]},{"label":["native.country"],"name":[14],"type":["chr"],"align":["left"]},{"label":["salary"],"name":[15],"type":["chr"],"align":["left"]}],"data":[{"1":"22","2":"Private","3":"310152","4":"Some-college","5":"10","6":"Never-married","7":"Protective-serv","8":"Not-in-family","9":"White","10":"Male","11":"0","12":"0","13":"40","14":"United-States","15":"<=50K","_rn_":"32556"},{"1":"27","2":"Private","3":"257302","4":"Assoc-acdm","5":"12","6":"Married-civ-spouse","7":"Tech-support","8":"Wife","9":"White","10":"Female","11":"0","12":"0","13":"38","14":"United-States","15":"<=50K","_rn_":"32557"},{"1":"40","2":"Private","3":"154374","4":"HS-grad","5":"9","6":"Married-civ-spouse","7":"Machine-op-inspct","8":"Husband","9":"White","10":"Male","11":"0","12":"0","13":"40","14":"United-States","15":">50K","_rn_":"32558"},{"1":"58","2":"Private","3":"151910","4":"HS-grad","5":"9","6":"Widowed","7":"Adm-clerical","8":"Unmarried","9":"White","10":"Female","11":"0","12":"0","13":"40","14":"United-States","15":"<=50K","_rn_":"32559"},{"1":"22","2":"Private","3":"201490","4":"HS-grad","5":"9","6":"Never-married","7":"Adm-clerical","8":"Own-child","9":"White","10":"Male","11":"0","12":"0","13":"20","14":"United-States","15":"<=50K","_rn_":"32560"},{"1":"52","2":"Self-emp-inc","3":"287927","4":"HS-grad","5":"9","6":"Married-civ-spouse","7":"Exec-managerial","8":"Wife","9":"White","10":"Female","11":"15024","12":"0","13":"40","14":"United-States","15":">50K","_rn_":"32561"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>Revisión de las variables para su análisis y limpieza</p>
+<pre class="r"><code>table (datos$age)</code></pre>
+<pre><code>## 
+##  17  18  19  20  21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36 
+## 395 550 712 753 720 765 877 798 841 785 835 867 813 861 888 828 875 886 876 898 
+##  37  38  39  40  41  42  43  44  45  46  47  48  49  50  51  52  53  54  55  56 
+## 858 827 816 794 808 780 770 724 734 737 708 543 577 602 595 478 464 415 419 366 
+##  57  58  59  60  61  62  63  64  65  66  67  68  69  70  71  72  73  74  75  76 
+## 358 366 355 312 300 258 230 208 178 150 151 120 108  89  72  67  64  51  45  46 
+##  77  78  79  80  81  82  83  84  85  86  87  88  90 
+##  29  23  22  22  20  12   6  10   3   1   1   3  43</code></pre>
+<pre class="r"><code>table (datos$workclass)</code></pre>
+<pre><code>## 
+##                 ?       Federal-gov         Local-gov      Never-worked 
+##              1836               960              2093                 7 
+##           Private      Self-emp-inc  Self-emp-not-inc         State-gov 
+##             22696              1116              2541              1298 
+##       Without-pay 
+##                14</code></pre>
+<pre class="r"><code>table (datos$education)</code></pre>
+<pre><code>## 
+##          10th          11th          12th       1st-4th       5th-6th 
+##           933          1175           433           168           333 
+##       7th-8th           9th    Assoc-acdm     Assoc-voc     Bachelors 
+##           646           514          1067          1382          5355 
+##     Doctorate       HS-grad       Masters     Preschool   Prof-school 
+##           413         10501          1723            51           576 
+##  Some-college 
+##          7291</code></pre>
+<pre class="r"><code>table (datos$education.num)</code></pre>
+<pre><code>## 
+##     1     2     3     4     5     6     7     8     9    10    11    12    13 
+##    51   168   333   646   514   933  1175   433 10501  7291  1382  1067  5355 
+##    14    15    16 
+##  1723   576   413</code></pre>
+<pre class="r"><code>table (datos$marital.status)</code></pre>
+<pre><code>## 
+##               Divorced      Married-AF-spouse     Married-civ-spouse 
+##                   4443                     23                  14976 
+##  Married-spouse-absent          Never-married              Separated 
+##                    418                  10683                   1025 
+##                Widowed 
+##                    993</code></pre>
+<pre class="r"><code>table (datos$occupation)</code></pre>
+<pre><code>## 
+##                  ?       Adm-clerical       Armed-Forces       Craft-repair 
+##               1843               3770                  9               4099 
+##    Exec-managerial    Farming-fishing  Handlers-cleaners  Machine-op-inspct 
+##               4066                994               1370               2002 
+##      Other-service    Priv-house-serv     Prof-specialty    Protective-serv 
+##               3295                149               4140                649 
+##              Sales       Tech-support   Transport-moving 
+##               3650                928               1597</code></pre>
+<pre class="r"><code>table (datos$relationship)</code></pre>
+<pre><code>## 
+##         Husband   Not-in-family  Other-relative       Own-child       Unmarried 
+##           13193            8305             981            5068            3446 
+##            Wife 
+##            1568</code></pre>
+<pre class="r"><code>table (datos$race)</code></pre>
+<pre><code>## 
+##  Amer-Indian-Eskimo  Asian-Pac-Islander               Black               Other 
+##                 311                1039                3124                 271 
+##               White 
+##               27816</code></pre>
+<pre class="r"><code>table (datos$sex)</code></pre>
+<pre><code>## 
+##  Female    Male 
+##   10771   21790</code></pre>
+<pre class="r"><code>table (datos$capital.gain)</code></pre>
+<pre><code>## 
+##     0   114   401   594   914   991  1055  1086  1111  1151  1173  1409  1424 
+## 29849     6     2    34     8     5    25     4     1     8     3     7     3 
+##  1455  1471  1506  1639  1797  1831  1848  2009  2036  2050  2062  2105  2174 
+##     1     7    15     1     7     7     6     3     4     5     2     9    48 
+##  2176  2202  2228  2290  2329  2346  2354  2387  2407  2414  2463  2538  2580 
+##    23    16     5     5     6     6    11     1    19     8    11     1    12 
+##  2597  2635  2653  2829  2885  2907  2936  2961  2964  2977  2993  3103  3137 
+##    20    11     5    31    24    11     3     3     9     8     2    97    37 
+##  3273  3325  3411  3418  3432  3456  3464  3471  3674  3781  3818  3887  3908 
+##     6    53    24     5     4     2    23     8    14    12     7     6    32 
+##  3942  4064  4101  4386  4416  4508  4650  4687  4787  4865  4931  4934  5013 
+##    14    42    20    70    12    12    41     3    23    17     1     7    69 
+##  5060  5178  5455  5556  5721  6097  6360  6418  6497  6514  6723  6767  6849 
+##     1    97    11     5     3     1     3     9    11     5     2     5    27 
+##  7298  7430  7443  7688  7896  7978  8614  9386  9562 10520 10566 10605 11678 
+##   246     9     5   284     3     1    55    22     4    43     6    12     2 
+## 13550 14084 14344 15020 15024 15831 18481 20051 22040 25124 25236 27828 34095 
+##    27    41    26     5   347     6     2    37     1     4    11    34     5 
+## 41310 99999 
+##     2   159</code></pre>
+<pre class="r"><code>table (datos$capital.loss)</code></pre>
+<pre><code>## 
+##     0   155   213   323   419   625   653   810   880   974  1092  1138  1258 
+## 31042     1     4     3     3    12     3     2     6     2     7     2     4 
+##  1340  1380  1408  1411  1485  1504  1539  1564  1573  1579  1590  1594  1602 
+##     7     7    21     1    51    18     1    25     6    20    40     8    47 
+##  1617  1628  1648  1651  1668  1669  1672  1719  1721  1726  1735  1740  1741 
+##     9    15     2     9     4    24    34    22    18     4     2    42    24 
+##  1755  1762  1816  1825  1844  1848  1876  1887  1902  1944  1974  1977  1980 
+##     2    14     2     4     1    51    39   159   202     1    18   168    23 
+##  2001  2002  2042  2051  2057  2080  2129  2149  2163  2174  2179  2201  2205 
+##    24    21     9    21     6     1     3     2     1     7    15     1     9 
+##  2206  2231  2238  2246  2258  2267  2282  2339  2352  2377  2392  2415  2444 
+##     6     3     2     6    25     3     1    17     2    20     9    49    12 
+##  2457  2467  2472  2489  2547  2559  2603  2754  2824  3004  3683  3770  3900 
+##     3     1     1     1     4    12     5     2    10     2     2     2     2 
+##  4356 
+##     3</code></pre>
+<pre class="r"><code>table (datos$hours.per.week)</code></pre>
+<pre><code>## 
+##     1     2     3     4     5     6     7     8     9    10    11    12    13 
+##    20    32    39    54    60    64    26   145    18   278    11   173    23 
+##    14    15    16    17    18    19    20    21    22    23    24    25    26 
+##    34   404   205    29    75    14  1224    24    44    21   252   674    30 
+##    27    28    29    30    31    32    33    34    35    36    37    38    39 
+##    30    86     7  1149     5   266    39    28  1297   220   149   476    38 
+##    40    41    42    43    44    45    46    47    48    49    50    51    52 
+## 15217    36   219   151   212  1824    82    49   517    29  2819    13   138 
+##    53    54    55    56    57    58    59    60    61    62    63    64    65 
+##    25    41   694    97    17    28     5  1475     2    18    10    14   244 
+##    66    67    68    70    72    73    74    75    76    77    78    80    81 
+##    17     4    12   291    71     2     1    66     3     6     8   133     3 
+##    82    84    85    86    87    88    89    90    91    92    94    95    96 
+##     1    45    13     2     1     2     2    29     3     1     1     2     5 
+##    97    98    99 
+##     2    11    85</code></pre>
+<pre class="r"><code>table (datos$native.country)</code></pre>
+<pre><code>## 
+##                           ?                    Cambodia 
+##                         583                          19 
+##                      Canada                       China 
+##                         121                          75 
+##                    Columbia                        Cuba 
+##                          59                          95 
+##          Dominican-Republic                     Ecuador 
+##                          70                          28 
+##                 El-Salvador                     England 
+##                         106                          90 
+##                      France                     Germany 
+##                          29                         137 
+##                      Greece                   Guatemala 
+##                          29                          64 
+##                       Haiti          Holand-Netherlands 
+##                          44                           1 
+##                    Honduras                        Hong 
+##                          13                          20 
+##                     Hungary                       India 
+##                          13                         100 
+##                        Iran                     Ireland 
+##                          43                          24 
+##                       Italy                     Jamaica 
+##                          73                          81 
+##                       Japan                        Laos 
+##                          62                          18 
+##                      Mexico                   Nicaragua 
+##                         643                          34 
+##  Outlying-US(Guam-USVI-etc)                        Peru 
+##                          14                          31 
+##                 Philippines                      Poland 
+##                         198                          60 
+##                    Portugal                 Puerto-Rico 
+##                          37                         114 
+##                    Scotland                       South 
+##                          12                          80 
+##                      Taiwan                    Thailand 
+##                          51                          18 
+##             Trinadad&amp;Tobago               United-States 
+##                          19                       29170 
+##                     Vietnam                  Yugoslavia 
+##                          67                          16</code></pre>
+<pre class="r"><code>table (datos$salary)</code></pre>
+<pre><code>## 
+##  &lt;=50K   &gt;50K 
+##  24720   7841</code></pre>
+<p>Tras el análisis de las distintas variables, hemos encontrado valores ‘?’, que consideramos como perdidos, en las siguientes variables<br />
+* age<br />
+* workclass<br />
+* occupation<br />
+* country</p>
+<p>Procedemos a sustituirlos. En el proceso de sustitución, encontramos que en todos los valores cadena de las distintas variables se ha insertado al inicio un espacio en blanco, incluido en el valor &quot; ?&quot;.</p>
+<pre class="r"><code>datos [datos == &quot; ?&quot;] &lt;- NA</code></pre>
+<p>Del total de datos leídos, los valores perdidos son</p>
+<pre class="r"><code>sum(is.na(datos))</code></pre>
+<pre><code>## [1] 4262</code></pre>
+<p>y por columna</p>
+<pre class="r"><code>apply (is.na (datos), 
+       2, 
+       sum)</code></pre>
+<pre><code>##            age      workclass         fnlwgt      education  education.num 
+##              0           1836              0              0              0 
+## marital.status     occupation   relationship           race            sex 
+##              0           1843              0              0              0 
+##   capital.gain   capital.loss hours.per.week native.country         salary 
+##              0              0              0            583              0</code></pre>
+<p>La media de valores perdidos por columna sería</p>
+<pre class="r"><code>apply (is.na (datos), 
+       2, 
+       mean)</code></pre>
+<pre><code>##            age      workclass         fnlwgt      education  education.num 
+##     0.00000000     0.05638647     0.00000000     0.00000000     0.00000000 
+## marital.status     occupation   relationship           race            sex 
+##     0.00000000     0.05660146     0.00000000     0.00000000     0.00000000 
+##   capital.gain   capital.loss hours.per.week native.country         salary 
+##     0.00000000     0.00000000     0.00000000     0.01790486     0.00000000</code></pre>
+<p>Lo que es despreciable en el volumen total de datos, por lo que podemos eliminarlos.</p>
+<pre class="r"><code>datos &lt;- na.omit(datos)</code></pre>
+<p>Con lo que nuestro dataframe ha cambiado de dimensión.</p>
+<pre class="r"><code>dim (datos)</code></pre>
+<pre><code>## [1] 30162    15</code></pre>
+<p>Se cambian las variables que empiezan por un espacio</p>
+<pre class="r"><code>datos$workclass &lt;- trimws(datos$workclass, 
+                          which = c(&quot;left&quot;))
+datos$education &lt;- trimws(datos$education, 
+                          which = c(&quot;left&quot;))
+datos$marital.status &lt;- trimws(datos$marital.status, 
+                               which = c(&quot;left&quot;))
+datos$occupation &lt;- trimws(datos$occupation, 
+                           which = c(&quot;left&quot;))
+datos$relationship &lt;- trimws(datos$relationship, 
+                             which = c(&quot;left&quot;))
+datos$race &lt;- trimws(datos$race, 
+                     which = c(&quot;left&quot;))
+datos$sex &lt;- trimws(datos$sex, 
+                    which = c(&quot;left&quot;))
+datos$salary &lt;- trimws(datos$salary, 
+                      which = c(&quot;left&quot;))</code></pre>
+<p>Se localizan valores ‘?’ en el dataset que pasamos a considerar valores na (Not Available), para después ser eliminados.</p>
+<pre class="r"><code>datos$workclass [which(datos$workclass == &quot;?&quot;)] &lt;- NA</code></pre>
+<p>No se encuentran en este dataset, pero sí se localizan caracteres</p>
 </div>
 <div id="inclusión-de-una-variable-secuencial-como-identificador-único-de-cada-fila.-reordenación-de-columnas." class="section level4">
 <h4>Inclusión de una variable secuencial como identificador único de cada fila. Reordenación de columnas.</h4>

@@ -10,32 +10,81 @@ output:
 lang: es-ES
 ---
 
-## 0.- Preliminares
+## 0.- Preliminares    
+    
+Esta práctica se ha realizado bajo el contexto de la asignatura Tipología y ciclo de vida de los datos (M2.851), perteneciente al Máster en Ciencia de Datos de la Universitat Oberta de Catalunya (UOC). En ella, se aplican técnicas de limpieza y análisis de datos mediante el lenguaje de programación R con el fin de limpiar y analizar un conjunto de datos para después estudiar la probabilidad de alcanzar (o no) cierto umbral de salario en base a los factores personales descritos en el dataset.
+    
+### Miembros del equipo    
+    
+El proyecto ha sido realizado de forma conjunta por:    
 
-### Paquetes utilizados
+- Adrià Cortés Andrés    
+- María Pilar Garcia Ruiz    
+    
+## 1.- Descripción del dataset. ¿Por qué es importante y qué pregunta/problema pretende responder?    
+    
+El conjunto de datos ha sido obtenido de la plataforma kaggle, en la url
+
+![Kaggle: Your Machine Learning and Data Science Community]
+https://www.kaggle.com/ddmasterdon/income-adult?select=adult_data.csv    
+    
+Las variables con las que cuenta el dataset son las siguientes:     
+    
+|Variables|Tipo|Descripción|
+|:---:|:---:|:---:|
+|Age|Numérico|Edad de la persona|
+|workclass|Texto|Clase de empleado. Campo categorizado.|
+|fnlwgt|Numérico|Peso final dado por la oficina que ha recogido los datos y que da el número de unidades en la población objetivo en base a una fórmula no facilitada-|
+|education|Texto|Nivel de estudios. Campo categorizado|
+|education-num|Texto|Años dedicados a los estudios|
+|marital-status|Texto|Situación sentimental. Campo categorizado|
+|occupation|Texto|Trabajo actual|
+|relationship|Texto|Relación familiar actual. Campo categorizado|
+|race|Texto|Raza. Campo categorizado|
+|sex|Texto|Sexo. Campo categorizado|
+|capital-gain|Numérico|Ganancia de capital|
+|capital-loss|Numérico|Pérdida de capital|
+|hours-per-week|Numérico|Horas de trabajo por semana|
+|native-country|Texto|Nacionalidad. Campo categorizado|
+|salary|Lógico|Salario|
+    
+Se escoge este dataset para ver si se puede estudiar qué  salario puede alcanzar una persona en base a su pertenencia a un grupo demográfico, con las características descritas en el conjunto de datos. 
+Se establece el estudio en torno a un umbral salarial predeterminado. Las personas que no alcanzan un determinado umbral de sueldo tienen una peor calidad de vida, se encuentran con más dificultad para hacer frente a cualquier eventualidad negativa y esto provoca otras consecuencias. Determinados grupos demográficos pueden convertirse en colectivos más vulnerables de la sociedad. Factores como la raza, el sexo, el nivel de estudios… etc pueden verse con un techo salarial y verse más afectados frente a las crisis económicas.    
+    
+## 2.- Integración y selección de los datos de interés a analizar.    
+    
+Se inicia la práctica con la lectura del ficheron de datos. Para ello, cargaremos los paquetes necesarios, cuyo número puede irse incrementando conforme avance el desarrollo de la práctica.    
+    
+#### Paquetes utilizados    
+    
 Se cargan fuera del rmarkdown, por problemas al ejecutar Knit.
-La instalación de una librería seguiría los siguientes pasos
-1) install.packages('dplyr')
-2) library ('dplyr')
-
-Paquetes utilizados
-* dplyr (manejo de dataframes)
-
-
-#### Directorio por defecto
-
+La instalación de una librería seguiría los siguientes pasos (ejemplo)    
+    
+1) install.packages('dplyr')    
+2) library ('dplyr')    
+    
+Paquetes utilizados en esta práctica    
+    
+* dplyr (manejo de dataframes)    
+    
+#### Directorio por defecto    
+    
 ```{r warning=FALSE}
 
 setwd('C:/Users/MPilar/Documents/GitHub/Factores_vs_Salario_Cleaning/code')
 
 ```
     
-#### Lectura del fichero    
+
+#### Lectura del fichero   
+    
+Se realiza la lectura con la función read.csv, indicando la coma como carácter separador y diciéndole que contamos con una primera fila de cabecera de columnas. A su vez, para mejorar la gestión de los datos, indicamos que las columnas de cadenas de caracteres, visualizados los datos, sean consideradas como tipo factor.   
     
 ```{r}
+
 datos <- read.csv ("C:/Users/MPilar/Documents/GitHub/Factores_vs_Salario_Cleaning/data/adult_data.csv", 
                    sep = ",", 
-                   stringsAsFactors = TRUE)
+                   header = TRUE)
 
 ```
     
@@ -51,6 +100,160 @@ dim (datos)
 str (datos)
 ```
     
+Se incluyen como ejemplo las primeras filas del dataset y las últimas para ilustrar los datos con los que contamos.   
+    
+```{r}
+head (datos)
+tail (datos)
+```
+
+Revisión de las variables para su análisis y limpieza
+
+```{r}
+table (datos$age)
+```
+    
+```{r}
+table (datos$workclass)
+```
+```{r}
+table (datos$education)
+```
+    
+```{r}
+table (datos$education.num)
+```
+    
+```{r}
+table (datos$marital.status)
+```
+    
+```{r}
+table (datos$occupation)
+```
+    
+```{r}
+table (datos$relationship)
+```
+    
+```{r}
+table (datos$race)
+```
+    
+```{r}
+table (datos$sex)
+```
+    
+```{r}
+table (datos$capital.gain)
+```
+    
+```{r}
+table (datos$capital.loss)
+```
+    
+```{r}
+table (datos$hours.per.week)
+```
+     
+```{r}
+table (datos$native.country)
+```
+     
+```{r}
+table (datos$salary)
+```
+     
+Tras el análisis de las distintas variables, hemos encontrado valores '?', que consideramos como perdidos, en las siguientes variables    
+* age    
+* workclass    
+* occupation    
+* country    
+    
+Procedemos a sustituirlos. En el proceso de sustitución, encontramos que en todos los valores cadena de las distintas variables se ha insertado al inicio un espacio en blanco, incluido en el valor " ?".    
+    
+```{r}
+datos [datos == " ?"] <- NA
+```
+    
+Del total de datos leídos, los valores perdidos son        
+    
+```{r}
+sum(is.na(datos))
+```
+y por columna   
+    
+```{r}
+apply (is.na (datos), 
+       2, 
+       sum)
+```
+    
+La media de valores perdidos por columna sería    
+    
+```{r}
+apply (is.na (datos), 
+       2, 
+       mean)
+```
+    
+Lo que es despreciable en el volumen total de datos, por lo que podemos eliminarlos.
+    
+```{r}
+datos <- na.omit(datos)
+```
+    
+Con lo que nuestro dataframe ha cambiado de dimensión.              
+    
+```{r}
+dim (datos)
+```
+    
+Se cambian las variables que empiezan por un espacio              
+    
+```{r}
+datos$workclass <- trimws(datos$workclass, 
+                          which = c("left"))
+datos$education <- trimws(datos$education, 
+                          which = c("left"))
+datos$marital.status <- trimws(datos$marital.status, 
+                               which = c("left"))
+datos$occupation <- trimws(datos$occupation, 
+                           which = c("left"))
+datos$relationship <- trimws(datos$relationship, 
+                             which = c("left"))
+datos$race <- trimws(datos$race, 
+                     which = c("left"))
+datos$sex <- trimws(datos$sex, 
+                    which = c("left"))
+datos$salary <- trimws(datos$salary, 
+                      which = c("left"))
+```
+          
+    
+```{r}
+
+```
+          
+    
+```{r}
+
+```
+          
+          
+
+
+Se localizan valores '?' en el dataset que pasamos a considerar valores na (Not Available), para después ser eliminados.
+
+```{r}
+
+datos$workclass [which(datos$workclass == "?")] <- NA
+
+
+```
+
+No se encuentran en este dataset, pero sí se localizan caracteres
+
 #### Inclusión de una variable secuencial como identificador único de cada fila. Reordenación de columnas.    
     
 ```{r}
