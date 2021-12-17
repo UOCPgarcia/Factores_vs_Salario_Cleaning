@@ -11,6 +11,7 @@
 
 <meta name="author" content="Adrià Cortés Andrés - MPilar García Ruiz" />
 
+<meta name="date" content="2021-12-12" />
 
 <title>Limpieza y análisis de datos</title>
 
@@ -168,7 +169,7 @@ pre code {
 
 <h1 class="title toc-ignore">Limpieza y análisis de datos</h1>
 <h4 class="author">Adrià Cortés Andrés - MPilar García Ruiz</h4>
-<h4 class="date">14/12/2021</h4>
+<h4 class="date">12/12/2021</h4>
 
 </div>
 
@@ -325,14 +326,12 @@ pre code {
 <li>dplyr (manejo de dataframes)</li>
 </ul>
 </div>
-<div id="directorio-por-defecto" class="section level4">
-<h4>Directorio por defecto</h4>
-<pre class="r"><code>setwd(&#39;C:/Users/MPilar/Documents/GitHub/Factores_vs_Salario_Cleaning/code&#39;)</code></pre>
-</div>
 <div id="lectura-del-fichero" class="section level4">
 <h4>Lectura del fichero</h4>
 <p>Se realiza la lectura con la función read.csv, indicando la coma como carácter separador y diciéndole que contamos con una primera fila de cabecera de columnas. A su vez, para mejorar la gestión de los datos, indicamos que las columnas de cadenas de caracteres, visualizados los datos, sean consideradas como tipo factor.</p>
-<pre class="r"><code>datos &lt;- read.csv (&quot;C:/Users/MPilar/Documents/GitHub/Factores_vs_Salario_Cleaning/data/adult_data.csv&quot;, 
+<pre class="r"><code># fichero a cargar: ./data/adult_data.csv
+
+datos &lt;- read.csv (file.choose(), 
                    sep = &quot;,&quot;, 
                    header = TRUE)</code></pre>
 </div>

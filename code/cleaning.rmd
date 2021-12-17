@@ -1,7 +1,7 @@
 ---
 title: "Limpieza y análisis de datos"
 author: "Adrià Cortés Andrés - MPilar García Ruiz"
-date: "14/12/2021"
+date: "12/12/2021"
 output:
   html_document:
     toc: yes
@@ -67,14 +67,6 @@ Paquetes utilizados en esta práctica
     
 * dplyr (manejo de dataframes)    
     
-#### Directorio por defecto    
-    
-```{r warning=FALSE}
-
-setwd('C:/Users/MPilar/Documents/GitHub/Factores_vs_Salario_Cleaning/code')
-
-```
-    
 
 #### Lectura del fichero   
     
@@ -82,7 +74,9 @@ Se realiza la lectura con la función read.csv, indicando la coma como carácter
     
 ```{r}
 
-datos <- read.csv ("C:/Users/MPilar/Documents/GitHub/Factores_vs_Salario_Cleaning/data/adult_data.csv", 
+# fichero a cargar: ./data/adult_data.csv
+
+datos <- read.csv (file.choose(), 
                    sep = ",", 
                    header = TRUE)
 
