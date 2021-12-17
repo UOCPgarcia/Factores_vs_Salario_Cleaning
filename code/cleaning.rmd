@@ -94,19 +94,19 @@ dim (datos)
 str (datos)
 ```
     
-Se incluyen como ejemplo las primeras filas del dataset y las últimas para ilustrar los datos con los que contamos.   
+Inspeccionamos 10 observaciones elegidas de manera aleatoria como ejemplo para ilustrar los datos con los que contamos.   
     
 ```{r}
-head (datos)
-tail (datos)
+set.seed(1) 
+datos [sample (nrow (datos), 10), ]
 ```
     
 ## 3.- Limpieza de los datos.    
      
 ### 3.1.- ¿Los datos contienen ceros o elementos vacíos? ¿Cómo gestionarías cada uno de estos casos?    
-
-Revisión de las variables para su análisis y limpieza
-
+    
+Tras un análisis visual, y utilizando rstudio, se localizan datos perdidos. A continuación, pasamos a la revisión de las variables para su análisis y limpieza.    
+    
 ```{r}
 table (datos$age)
 ```
