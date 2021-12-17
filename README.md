@@ -5,7 +5,7 @@ Práctica Limpieza y análisis de datos UOC M2.851
 ## Descripción
 
 Esta práctica se ha realizado bajo el contexto de la asignatura Tipología y ciclo de vida de los datos (M2.851), perteneciente
-al Máster en Ciencia de Datos de la Universitat Oberta de Catalunya (UOC). En ella, se aplican técnicas de limpieza y análisis de datos mediante el lenguaje de programación R con el fin de limpiar y analizar un conjunto de datos para después estudiar la probabilidad de alcanzar cierto umbral de salario en base a los factores personales descritos en el dataset.
+al Máster en Ciencia de Datos de la Universitat Oberta de Catalunya (UOC). En ella, se aplican técnicas de limpieza y análisis de datos mediante el lenguaje de programación R con el fin de limpiar y analizar un conjunto de datos para después estudiar la probabilidad de alcanzar cierto umbral de salario en base a los factores poblacionales descritos en el dataset.
 
 El conjunto de datos ha sido obtenido de la plataforma kaggle, en la url
 
