@@ -199,11 +199,11 @@ pre code {
 </ul>
 </div>
 
-<div id="preliminares" class="section level2">
-<h2>0.- Preliminares</h2>
+<div id="preliminares" class="section level3">
+<h3>0.- Preliminares</h3>
 <p>Esta práctica se ha realizado bajo el contexto de la asignatura Tipología y ciclo de vida de los datos (M2.851), perteneciente al Máster en Ciencia de Datos de la Universitat Oberta de Catalunya (UOC). En ella, se aplican técnicas de limpieza y análisis de datos mediante el lenguaje de programación R con el fin de limpiar y analizar un conjunto de datos para después estudiar la probabilidad de alcanzar (o no) cierto umbral de salario en base a los factores personales descritos en el dataset.</p>
-<div id="miembros-del-equipo" class="section level3">
-<h3>Miembros del equipo</h3>
+<div id="miembros-del-equipo" class="section level4">
+<h4>Miembros del equipo</h4>
 <p>El proyecto ha sido realizado de forma conjunta por:</p>
 <ul>
 <li>Adrià Cortés Andrés<br />
@@ -212,8 +212,8 @@ pre code {
 </ul>
 </div>
 </div>
-<div id="descripción-del-dataset.-por-qué-es-importante-y-qué-preguntaproblema-pretende-responder" class="section level2">
-<h2>1.- Descripción del dataset. ¿Por qué es importante y qué pregunta/problema pretende responder?</h2>
+<div id="descripción-del-dataset.-por-qué-es-importante-y-qué-preguntaproblema-pretende-responder" class="section level3">
+<h3>1.- Descripción del dataset. ¿Por qué es importante y qué pregunta/problema pretende responder?</h3>
 <p>El conjunto de datos ha sido obtenido de la plataforma kaggle, en la url</p>
 <p>[Kaggle: Your Machine Learning and Data Science Community] <a href="https://www.kaggle.com/ddmasterdon/income-adult?select=adult_data.csv" class="uri">https://www.kaggle.com/ddmasterdon/income-adult?select=adult_data.csv</a></p>
 <p>Las variables con las que cuenta el dataset son las siguientes:</p>
@@ -310,11 +310,11 @@ pre code {
 </table>
 <p>Se escoge este dataset para ver si se puede estudiar qué salario puede alcanzar una persona en base a su pertenencia a un grupo demográfico, con las características descritas en el conjunto de datos. Se establece el estudio en torno a un umbral salarial predeterminado. Las personas que no alcanzan un determinado umbral de sueldo tienen una peor calidad de vida, se encuentran con más dificultad para hacer frente a cualquier eventualidad negativa y esto provoca otras consecuencias. Determinados grupos demográficos pueden convertirse en colectivos más vulnerables de la sociedad. Factores como la raza, el sexo, el nivel de estudios… etc pueden verse con un techo salarial y verse más afectados frente a las crisis económicas.</p>
 </div>
-<div id="integración-y-selección-de-los-datos-de-interés-a-analizar." class="section level2">
-<h2>2.- Integración y selección de los datos de interés a analizar.</h2>
+<div id="integración-y-selección-de-los-datos-de-interés-a-analizar." class="section level3">
+<h3>2.- Integración y selección de los datos de interés a analizar.</h3>
 <p>Se inicia la práctica con la lectura del ficheron de datos. Para ello, cargaremos los paquetes necesarios, cuyo número puede irse incrementando conforme avance el desarrollo de la práctica.</p>
-<div id="paquetes-utilizados" class="section level4">
-<h4>Paquetes utilizados</h4>
+<div id="paquetes-utilizados" class="section level5">
+<h5>Paquetes utilizados</h5>
 <p>Se cargan fuera del rmarkdown, por problemas al ejecutar Knit. La instalación de una librería seguiría los siguientes pasos (ejemplo)</p>
 <ol style="list-style-type: decimal">
 <li>install.packages(‘dplyr’)<br />
@@ -326,8 +326,8 @@ pre code {
 <li>dplyr (manejo de dataframes)</li>
 </ul>
 </div>
-<div id="lectura-del-fichero" class="section level4">
-<h4>Lectura del fichero</h4>
+<div id="lectura-del-fichero" class="section level5">
+<h5>Lectura del fichero</h5>
 <p>Se realiza la lectura con la función read.csv, indicando la coma como carácter separador y diciéndole que contamos con una primera fila de cabecera de columnas. A su vez, para mejorar la gestión de los datos, indicamos que las columnas de cadenas de caracteres, visualizados los datos, sean consideradas como tipo factor.</p>
 <pre class="r"><code># fichero a cargar: ./data/adult_data.csv
 
@@ -335,13 +335,13 @@ datos &lt;- read.csv (file.choose(),
                    sep = &quot;,&quot;, 
                    header = TRUE)</code></pre>
 </div>
-<div id="dimensión-del-conjunto-de-datos" class="section level4">
-<h4>Dimensión del conjunto de datos</h4>
+<div id="dimensión-del-conjunto-de-datos" class="section level5">
+<h5>Dimensión del conjunto de datos</h5>
 <pre class="r"><code>dim (datos)</code></pre>
 <pre><code>## [1] 32561    15</code></pre>
 </div>
-<div id="características-de-las-variables-leídas" class="section level4">
-<h4>Características de las variables leídas</h4>
+<div id="características-de-las-variables-leídas" class="section level5">
+<h5>Características de las variables leídas</h5>
 <pre class="r"><code>str (datos)</code></pre>
 <pre><code>## &#39;data.frame&#39;:    32561 obs. of  15 variables:
 ##  $ age           : int  39 50 38 53 28 37 49 52 31 42 ...
@@ -359,26 +359,102 @@ datos &lt;- read.csv (file.choose(),
 ##  $ hours.per.week: int  40 13 40 40 40 40 16 45 50 40 ...
 ##  $ native.country: chr  &quot; United-States&quot; &quot; United-States&quot; &quot; United-States&quot; &quot; United-States&quot; ...
 ##  $ salary        : chr  &quot; &lt;=50K&quot; &quot; &lt;=50K&quot; &quot; &lt;=50K&quot; &quot; &lt;=50K&quot; ...</code></pre>
-<p>Se incluyen como ejemplo las primeras filas del dataset y las últimas para ilustrar los datos con los que contamos.</p>
-<pre class="r"><code>head (datos)</code></pre>
+<p>Inspeccionamos 10 observaciones elegidas de manera aleatoria como ejemplo para ilustrar los datos con los que contamos.</p>
+<pre class="r"><code>set.seed(1) 
+datos [sample (nrow (datos), 10), ]</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["age"],"name":[1],"type":["int"],"align":["right"]},{"label":["workclass"],"name":[2],"type":["chr"],"align":["left"]},{"label":["fnlwgt"],"name":[3],"type":["int"],"align":["right"]},{"label":["education"],"name":[4],"type":["chr"],"align":["left"]},{"label":["education.num"],"name":[5],"type":["int"],"align":["right"]},{"label":["marital.status"],"name":[6],"type":["chr"],"align":["left"]},{"label":["occupation"],"name":[7],"type":["chr"],"align":["left"]},{"label":["relationship"],"name":[8],"type":["chr"],"align":["left"]},{"label":["race"],"name":[9],"type":["chr"],"align":["left"]},{"label":["sex"],"name":[10],"type":["chr"],"align":["left"]},{"label":["capital.gain"],"name":[11],"type":["int"],"align":["right"]},{"label":["capital.loss"],"name":[12],"type":["int"],"align":["right"]},{"label":["hours.per.week"],"name":[13],"type":["int"],"align":["right"]},{"label":["native.country"],"name":[14],"type":["chr"],"align":["left"]},{"label":["salary"],"name":[15],"type":["chr"],"align":["left"]}],"data":[{"1":"39","2":"State-gov","3":"77516","4":"Bachelors","5":"13","6":"Never-married","7":"Adm-clerical","8":"Not-in-family","9":"White","10":"Male","11":"2174","12":"0","13":"40","14":"United-States","15":"<=50K","_rn_":"1"},{"1":"50","2":"Self-emp-not-inc","3":"83311","4":"Bachelors","5":"13","6":"Married-civ-spouse","7":"Exec-managerial","8":"Husband","9":"White","10":"Male","11":"0","12":"0","13":"13","14":"United-States","15":"<=50K","_rn_":"2"},{"1":"38","2":"Private","3":"215646","4":"HS-grad","5":"9","6":"Divorced","7":"Handlers-cleaners","8":"Not-in-family","9":"White","10":"Male","11":"0","12":"0","13":"40","14":"United-States","15":"<=50K","_rn_":"3"},{"1":"53","2":"Private","3":"234721","4":"11th","5":"7","6":"Married-civ-spouse","7":"Handlers-cleaners","8":"Husband","9":"Black","10":"Male","11":"0","12":"0","13":"40","14":"United-States","15":"<=50K","_rn_":"4"},{"1":"28","2":"Private","3":"338409","4":"Bachelors","5":"13","6":"Married-civ-spouse","7":"Prof-specialty","8":"Wife","9":"Black","10":"Female","11":"0","12":"0","13":"40","14":"Cuba","15":"<=50K","_rn_":"5"},{"1":"37","2":"Private","3":"284582","4":"Masters","5":"14","6":"Married-civ-spouse","7":"Exec-managerial","8":"Wife","9":"White","10":"Female","11":"0","12":"0","13":"40","14":"United-States","15":"<=50K","_rn_":"6"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["age"],"name":[1],"type":["int"],"align":["right"]},{"label":["workclass"],"name":[2],"type":["chr"],"align":["left"]},{"label":["fnlwgt"],"name":[3],"type":["int"],"align":["right"]},{"label":["education"],"name":[4],"type":["chr"],"align":["left"]},{"label":["education.num"],"name":[5],"type":["int"],"align":["right"]},{"label":["marital.status"],"name":[6],"type":["chr"],"align":["left"]},{"label":["occupation"],"name":[7],"type":["chr"],"align":["left"]},{"label":["relationship"],"name":[8],"type":["chr"],"align":["left"]},{"label":["race"],"name":[9],"type":["chr"],"align":["left"]},{"label":["sex"],"name":[10],"type":["chr"],"align":["left"]},{"label":["capital.gain"],"name":[11],"type":["int"],"align":["right"]},{"label":["capital.loss"],"name":[12],"type":["int"],"align":["right"]},{"label":["hours.per.week"],"name":[13],"type":["int"],"align":["right"]},{"label":["native.country"],"name":[14],"type":["chr"],"align":["left"]},{"label":["salary"],"name":[15],"type":["chr"],"align":["left"]}],"data":[{"1":"51","2":"Private","3":"441637","4":"HS-grad","5":"9","6":"Married-civ-spouse","7":"Tech-support","8":"Husband","9":"White","10":"Male","11":"0","12":"0","13":"40","14":"United-States","15":"<=50K","_rn_":"17401"},{"1":"38","2":"Private","3":"115289","4":"HS-grad","5":"9","6":"Married-civ-spouse","7":"Machine-op-inspct","8":"Husband","9":"White","10":"Male","11":"0","12":"0","13":"40","14":"United-States","15":"<=50K","_rn_":"24388"},{"1":"30","2":"Private","3":"53158","4":"Assoc-acdm","5":"12","6":"Never-married","7":"Tech-support","8":"Not-in-family","9":"White","10":"Female","11":"0","12":"0","13":"40","14":"United-States","15":"<=50K","_rn_":"4775"},{"1":"38","2":"Private","3":"172538","4":"Bachelors","5":"13","6":"Married-civ-spouse","7":"Tech-support","8":"Husband","9":"White","10":"Male","11":"0","12":"1977","13":"40","14":"United-States","15":">50K","_rn_":"26753"},{"1":"21","2":"Private","3":"200973","4":"Some-college","5":"10","6":"Never-married","7":"Sales","8":"Own-child","9":"White","10":"Female","11":"0","12":"0","13":"20","14":"United-States","15":"<=50K","_rn_":"13218"},{"1":"34","2":"Private","3":"80058","4":"Prof-school","5":"15","6":"Never-married","7":"Exec-managerial","8":"Own-child","9":"White","10":"Male","11":"0","12":"0","13":"50","14":"United-States","15":"<=50K","_rn_":"26109"},{"1":"33","2":"Private","3":"90668","4":"HS-grad","5":"9","6":"Never-married","7":"Adm-clerical","8":"Not-in-family","9":"White","10":"Female","11":"0","12":"0","13":"40","14":"United-States","15":"<=50K","_rn_":"29143"},{"1":"66","2":"Private","3":"185336","4":"HS-grad","5":"9","6":"Widowed","7":"Sales","8":"Other-relative","9":"White","10":"Female","11":"0","12":"0","13":"35","14":"United-States","15":"<=50K","_rn_":"10539"},{"1":"38","2":"Private","3":"108140","4":"Bachelors","5":"13","6":"Never-married","7":"Other-service","8":"Not-in-family","9":"White","10":"Male","11":"0","12":"0","13":"20","14":"United-States","15":"<=50K","_rn_":"8462"},{"1":"28","2":"Private","3":"25955","4":"Assoc-voc","5":"11","6":"Divorced","7":"Craft-repair","8":"Not-in-family","9":"Amer-Indian-Eskimo","10":"Male","11":"0","12":"0","13":"40","14":"United-States","15":"<=50K","_rn_":"4050"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
-<pre class="r"><code>tail (datos)</code></pre>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["age"],"name":[1],"type":["int"],"align":["right"]},{"label":["workclass"],"name":[2],"type":["chr"],"align":["left"]},{"label":["fnlwgt"],"name":[3],"type":["int"],"align":["right"]},{"label":["education"],"name":[4],"type":["chr"],"align":["left"]},{"label":["education.num"],"name":[5],"type":["int"],"align":["right"]},{"label":["marital.status"],"name":[6],"type":["chr"],"align":["left"]},{"label":["occupation"],"name":[7],"type":["chr"],"align":["left"]},{"label":["relationship"],"name":[8],"type":["chr"],"align":["left"]},{"label":["race"],"name":[9],"type":["chr"],"align":["left"]},{"label":["sex"],"name":[10],"type":["chr"],"align":["left"]},{"label":["capital.gain"],"name":[11],"type":["int"],"align":["right"]},{"label":["capital.loss"],"name":[12],"type":["int"],"align":["right"]},{"label":["hours.per.week"],"name":[13],"type":["int"],"align":["right"]},{"label":["native.country"],"name":[14],"type":["chr"],"align":["left"]},{"label":["salary"],"name":[15],"type":["chr"],"align":["left"]}],"data":[{"1":"22","2":"Private","3":"310152","4":"Some-college","5":"10","6":"Never-married","7":"Protective-serv","8":"Not-in-family","9":"White","10":"Male","11":"0","12":"0","13":"40","14":"United-States","15":"<=50K","_rn_":"32556"},{"1":"27","2":"Private","3":"257302","4":"Assoc-acdm","5":"12","6":"Married-civ-spouse","7":"Tech-support","8":"Wife","9":"White","10":"Female","11":"0","12":"0","13":"38","14":"United-States","15":"<=50K","_rn_":"32557"},{"1":"40","2":"Private","3":"154374","4":"HS-grad","5":"9","6":"Married-civ-spouse","7":"Machine-op-inspct","8":"Husband","9":"White","10":"Male","11":"0","12":"0","13":"40","14":"United-States","15":">50K","_rn_":"32558"},{"1":"58","2":"Private","3":"151910","4":"HS-grad","5":"9","6":"Widowed","7":"Adm-clerical","8":"Unmarried","9":"White","10":"Female","11":"0","12":"0","13":"40","14":"United-States","15":"<=50K","_rn_":"32559"},{"1":"22","2":"Private","3":"201490","4":"HS-grad","5":"9","6":"Never-married","7":"Adm-clerical","8":"Own-child","9":"White","10":"Male","11":"0","12":"0","13":"20","14":"United-States","15":"<=50K","_rn_":"32560"},{"1":"52","2":"Self-emp-inc","3":"287927","4":"HS-grad","5":"9","6":"Married-civ-spouse","7":"Exec-managerial","8":"Wife","9":"White","10":"Female","11":"15024","12":"0","13":"40","14":"United-States","15":">50K","_rn_":"32561"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
+<p>Dado el estudio que se pretende hacer, y tras el estudio de las variables, se desestiman para el estudio la ganancia y pérdida de capital. La variable fnlwgt se dejará más adelante en un Análisis de Componentes Principales para ponderar si aporta o no al estudio.</p>
+<pre class="r"><code>datos &lt;- dplyr::select (datos,
+                        -capital.gain,
+                        -capital.loss)
+
+str (datos)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    32561 obs. of  13 variables:
+##  $ age           : int  39 50 38 53 28 37 49 52 31 42 ...
+##  $ workclass     : chr  &quot; State-gov&quot; &quot; Self-emp-not-inc&quot; &quot; Private&quot; &quot; Private&quot; ...
+##  $ fnlwgt        : int  77516 83311 215646 234721 338409 284582 160187 209642 45781 159449 ...
+##  $ education     : chr  &quot; Bachelors&quot; &quot; Bachelors&quot; &quot; HS-grad&quot; &quot; 11th&quot; ...
+##  $ education.num : int  13 13 9 7 13 14 5 9 14 13 ...
+##  $ marital.status: chr  &quot; Never-married&quot; &quot; Married-civ-spouse&quot; &quot; Divorced&quot; &quot; Married-civ-spouse&quot; ...
+##  $ occupation    : chr  &quot; Adm-clerical&quot; &quot; Exec-managerial&quot; &quot; Handlers-cleaners&quot; &quot; Handlers-cleaners&quot; ...
+##  $ relationship  : chr  &quot; Not-in-family&quot; &quot; Husband&quot; &quot; Not-in-family&quot; &quot; Husband&quot; ...
+##  $ race          : chr  &quot; White&quot; &quot; White&quot; &quot; White&quot; &quot; Black&quot; ...
+##  $ sex           : chr  &quot; Male&quot; &quot; Male&quot; &quot; Male&quot; &quot; Male&quot; ...
+##  $ hours.per.week: int  40 13 40 40 40 40 16 45 50 40 ...
+##  $ native.country: chr  &quot; United-States&quot; &quot; United-States&quot; &quot; United-States&quot; &quot; United-States&quot; ...
+##  $ salary        : chr  &quot; &lt;=50K&quot; &quot; &lt;=50K&quot; &quot; &lt;=50K&quot; &quot; &lt;=50K&quot; ...</code></pre>
+<p>Inclusión de una variable secuencial como identificador único de cada fila. Reordenación de columnas.</p>
+<pre class="r"><code>filas &lt;- nrow (datos)
+
+datos &lt;- cbind (datos, &#39;id&#39; = 1:filas)
+
+names (datos)</code></pre>
+<pre><code>##  [1] &quot;age&quot;            &quot;workclass&quot;      &quot;fnlwgt&quot;         &quot;education&quot;     
+##  [5] &quot;education.num&quot;  &quot;marital.status&quot; &quot;occupation&quot;     &quot;relationship&quot;  
+##  [9] &quot;race&quot;           &quot;sex&quot;            &quot;hours.per.week&quot; &quot;native.country&quot;
+## [13] &quot;salary&quot;         &quot;id&quot;</code></pre>
+<pre class="r"><code>datos &lt;- subset (datos,
+                 select = c(14,
+                            1,
+                            2,
+                            3,
+                            4,
+                            5,
+                            6,
+                            7,
+                            8,
+                            9,
+                            10,
+                            11,
+                            12,
+                            13))
+
+names (datos)</code></pre>
+<pre><code>##  [1] &quot;id&quot;             &quot;age&quot;            &quot;workclass&quot;      &quot;fnlwgt&quot;        
+##  [5] &quot;education&quot;      &quot;education.num&quot;  &quot;marital.status&quot; &quot;occupation&quot;    
+##  [9] &quot;relationship&quot;   &quot;race&quot;           &quot;sex&quot;            &quot;hours.per.week&quot;
+## [13] &quot;native.country&quot; &quot;salary&quot;</code></pre>
+<p>La segmentación por rangos de edad permite establecer nichos más concretos y a profundizar en el estudio. Se establecen categorías de edad para el estudio de empleabilidad vs salario en las siguientes escalas<br />
+* 0 a 16 años, cat_0<br />
+* 17 a 20, cat_1<br />
+* 21 a 34, cat_2<br />
+* 35 a 45, cat_3<br />
+* 46 a 65, cat_4<br />
+* 65 ~, cat_5</p>
+<pre class="r"><code>datos &lt;- cbind (datos,
+                age_cat = cut (datos$age,
+                               breaks = c(0,
+                                          16,
+                                          20,
+                                          34,
+                                          45,
+                                          65,
+                                          150),
+                               labels = c(&quot;cat_0&quot;,
+                                          &quot;cat_1&quot;,
+                                          &quot;cat_2&quot;,
+                                          &quot;cat_3&quot;,
+                                          &quot;cat_4&quot;,
+                                          &quot;cat_5&quot;),
+                               right = TRUE
+                               ))
+
+names (datos)</code></pre>
+<pre><code>##  [1] &quot;id&quot;             &quot;age&quot;            &quot;workclass&quot;      &quot;fnlwgt&quot;        
+##  [5] &quot;education&quot;      &quot;education.num&quot;  &quot;marital.status&quot; &quot;occupation&quot;    
+##  [9] &quot;relationship&quot;   &quot;race&quot;           &quot;sex&quot;            &quot;hours.per.week&quot;
+## [13] &quot;native.country&quot; &quot;salary&quot;         &quot;age_cat&quot;</code></pre>
 </div>
 </div>
-</div>
-<div id="limpieza-de-los-datos." class="section level2">
-<h2>3.- Limpieza de los datos.</h2>
-<div id="los-datos-contienen-ceros-o-elementos-vacíos-cómo-gestionarías-cada-uno-de-estos-casos" class="section level3">
-<h3>3.1.- ¿Los datos contienen ceros o elementos vacíos? ¿Cómo gestionarías cada uno de estos casos?</h3>
-<p>Revisión de las variables para su análisis y limpieza</p>
+<div id="limpieza-de-los-datos." class="section level3">
+<h3>3.- Limpieza de los datos.</h3>
+<div id="los-datos-contienen-ceros-o-elementos-vacíos-cómo-gestionarías-cada-uno-de-estos-casos" class="section level4">
+<h4>3.1.- ¿Los datos contienen ceros o elementos vacíos? ¿Cómo gestionarías cada uno de estos casos?</h4>
+<p>Tras un análisis visual, y utilizando rstudio, se localizan datos perdidos. A continuación, pasamos a la revisión de las variables para su análisis y limpieza.</p>
 <pre class="r"><code>table (datos$age)</code></pre>
 <pre><code>## 
 ##  17  18  19  20  21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36 
@@ -448,45 +524,9 @@ datos &lt;- read.csv (file.choose(),
 ##  Female    Male 
 ##   10771   21790</code></pre>
 <pre class="r"><code>table (datos$capital.gain)</code></pre>
-<pre><code>## 
-##     0   114   401   594   914   991  1055  1086  1111  1151  1173  1409  1424 
-## 29849     6     2    34     8     5    25     4     1     8     3     7     3 
-##  1455  1471  1506  1639  1797  1831  1848  2009  2036  2050  2062  2105  2174 
-##     1     7    15     1     7     7     6     3     4     5     2     9    48 
-##  2176  2202  2228  2290  2329  2346  2354  2387  2407  2414  2463  2538  2580 
-##    23    16     5     5     6     6    11     1    19     8    11     1    12 
-##  2597  2635  2653  2829  2885  2907  2936  2961  2964  2977  2993  3103  3137 
-##    20    11     5    31    24    11     3     3     9     8     2    97    37 
-##  3273  3325  3411  3418  3432  3456  3464  3471  3674  3781  3818  3887  3908 
-##     6    53    24     5     4     2    23     8    14    12     7     6    32 
-##  3942  4064  4101  4386  4416  4508  4650  4687  4787  4865  4931  4934  5013 
-##    14    42    20    70    12    12    41     3    23    17     1     7    69 
-##  5060  5178  5455  5556  5721  6097  6360  6418  6497  6514  6723  6767  6849 
-##     1    97    11     5     3     1     3     9    11     5     2     5    27 
-##  7298  7430  7443  7688  7896  7978  8614  9386  9562 10520 10566 10605 11678 
-##   246     9     5   284     3     1    55    22     4    43     6    12     2 
-## 13550 14084 14344 15020 15024 15831 18481 20051 22040 25124 25236 27828 34095 
-##    27    41    26     5   347     6     2    37     1     4    11    34     5 
-## 41310 99999 
-##     2   159</code></pre>
+<pre><code>## &lt; table of extent 0 &gt;</code></pre>
 <pre class="r"><code>table (datos$capital.loss)</code></pre>
-<pre><code>## 
-##     0   155   213   323   419   625   653   810   880   974  1092  1138  1258 
-## 31042     1     4     3     3    12     3     2     6     2     7     2     4 
-##  1340  1380  1408  1411  1485  1504  1539  1564  1573  1579  1590  1594  1602 
-##     7     7    21     1    51    18     1    25     6    20    40     8    47 
-##  1617  1628  1648  1651  1668  1669  1672  1719  1721  1726  1735  1740  1741 
-##     9    15     2     9     4    24    34    22    18     4     2    42    24 
-##  1755  1762  1816  1825  1844  1848  1876  1887  1902  1944  1974  1977  1980 
-##     2    14     2     4     1    51    39   159   202     1    18   168    23 
-##  2001  2002  2042  2051  2057  2080  2129  2149  2163  2174  2179  2201  2205 
-##    24    21     9    21     6     1     3     2     1     7    15     1     9 
-##  2206  2231  2238  2246  2258  2267  2282  2339  2352  2377  2392  2415  2444 
-##     6     3     2     6    25     3     1    17     2    20     9    49    12 
-##  2457  2467  2472  2489  2547  2559  2603  2754  2824  3004  3683  3770  3900 
-##     3     1     1     1     4    12     5     2    10     2     2     2     2 
-##  4356 
-##     3</code></pre>
+<pre><code>## &lt; table of extent 0 &gt;</code></pre>
 <pre class="r"><code>table (datos$hours.per.week)</code></pre>
 <pre><code>## 
 ##     1     2     3     4     5     6     7     8     9    10    11    12    13 
@@ -567,22 +607,22 @@ datos &lt;- read.csv (file.choose(),
 <pre class="r"><code>apply (is.na (datos), 
        2, 
        sum)</code></pre>
-<pre><code>##            age      workclass         fnlwgt      education  education.num 
-##              0           1836              0              0              0 
-## marital.status     occupation   relationship           race            sex 
-##              0           1843              0              0              0 
-##   capital.gain   capital.loss hours.per.week native.country         salary 
-##              0              0              0            583              0</code></pre>
+<pre><code>##             id            age      workclass         fnlwgt      education 
+##              0              0           1836              0              0 
+##  education.num marital.status     occupation   relationship           race 
+##              0              0           1843              0              0 
+##            sex hours.per.week native.country         salary        age_cat 
+##              0              0            583              0              0</code></pre>
 <p>La media de valores perdidos por columna sería</p>
 <pre class="r"><code>apply (is.na (datos), 
        2, 
        mean)</code></pre>
-<pre><code>##            age      workclass         fnlwgt      education  education.num 
-##     0.00000000     0.05638647     0.00000000     0.00000000     0.00000000 
-## marital.status     occupation   relationship           race            sex 
-##     0.00000000     0.05660146     0.00000000     0.00000000     0.00000000 
-##   capital.gain   capital.loss hours.per.week native.country         salary 
-##     0.00000000     0.00000000     0.00000000     0.01790486     0.00000000</code></pre>
+<pre><code>##             id            age      workclass         fnlwgt      education 
+##     0.00000000     0.00000000     0.05638647     0.00000000     0.00000000 
+##  education.num marital.status     occupation   relationship           race 
+##     0.00000000     0.00000000     0.05660146     0.00000000     0.00000000 
+##            sex hours.per.week native.country         salary        age_cat 
+##     0.00000000     0.00000000     0.01790486     0.00000000     0.00000000</code></pre>
 <p>Lo que es despreciable en el volumen total de datos, por lo que podemos eliminarlos.</p>
 <pre class="r"><code>datos &lt;- na.omit(datos)</code></pre>
 <p>Con lo que nuestro dataframe ha cambiado de dimensión.</p>
@@ -606,93 +646,63 @@ datos$sex &lt;- trimws(datos$sex,
 datos$salary &lt;- trimws(datos$salary, 
                       which = c(&quot;left&quot;))</code></pre>
 </div>
-<div id="identificación-y-tratamiento-de-valores-extremos." class="section level3">
-<h3>3.2.- Identificación y tratamiento de valores extremos.</h3>
+<div id="identificación-y-tratamiento-de-valores-extremos." class="section level4">
+<h4>3.2.- Identificación y tratamiento de valores extremos.</h4>
+<p>Gráficamente</p>
+<pre class="r"><code>boxplot ( datos$age,
+          main=&quot;Edad&quot;)</code></pre>
+<p><img src="data:image/png;base64,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" width="672" /></p>
+<p>Por funciones, que nos muestren el valor de los outliers por variable</p>
+<pre class="r"><code>boxplot.stats(datos$age)$out</code></pre>
+<pre><code>##   [1] 79 76 90 77 76 81 78 90 88 90 77 90 77 78 80 90 81 81 76 80 90 76 79 76 81
+##  [26] 76 90 90 80 90 90 79 78 79 84 90 77 80 77 90 81 83 84 79 76 85 82 79 77 90
+##  [51] 76 90 84 78 78 76 80 90 90 77 76 84 76 90 76 90 76 77 90 77 78 77 81 78 82
+##  [76] 81 77 76 80 90 80 84 82 78 79 76 90 84 90 83 78 80 77 78 76 79 80 79 80 90
+## [101] 90 90 81 76 83 90 90 81 80 80 90 79 77 77 80 76 82 85 80 79 90 76 76 77 76
+## [126] 79 81 77 88 90 82 76 88 76 77 83 76 77 79 77 86 90 77 82 83 81 76 79 76 84
+## [151] 78 76 76 76 78 84 79 78 90 80 81 78 81 90 80 82 90 90 85</code></pre>
+<pre class="r"><code>boxplot ( datos$education.num,
+          main=&quot;Número de años de estudios&quot;)</code></pre>
+<p><img src="data:image/png;base64,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9QQUtvkoJ9UEFHboJ7UEFCAkoAAhAQUICShASEABQgIKEBJQgJCAAoQEFCAkoAAhAQUICShASEABQgIKEBJQgNAfLqAA7TRvVOsNtvTQ/9jAaWneqNYbBPijEFCAkIAChAQUICSgACEBBQgJKEBIQAFCAgoQElCAkIAChAQUICSgACEBBQgJKEBIQAFCAgoQElCAkIAChAQUICSgACEBBQgJKEBIQAFCAgoQElCAkIAChAQUICSgACEBBQgJKEBIQAFCAgoQElCAkIAChAQUICSgACEBBQgJKEBIQAFCAgoQElCAkIAChAQUICSgACEBBQgJKEBIQAFCAgoQElCAkIAChAQUICSgACEBBQgJKEBIQAFCAgoQElCAkIAChAQUICSgACEBBQgJKEBIQAFCAgoQElCAkIAChAQUICSgACEBBQgJKEBIQAFCAgoQElCAkIAChAQUICSgACEBBQgJKEBIQAFCAgoQElCAkIAChAQUICSgACEBBQgJKEBIQAFCAgoQElCAkIAChAQUICSgACEBBQgJKEBIQAFCAgoQElCAkIAChAQUICSgACEBBQgJKEBIQAFCAgoQElCAkIAChAQUICSgACEBBQgJKEBIQAFCAgoQElCAkIAChAQUICSgACEBBQgJKEBIQAFCAgoQElCAkIAChAQUICSgACEBBQgJKEBIQAFCAgoQElCAkIAChAQUICSgACEBBQgJKEBIQAFCAgoQElCAkIAChAQUICSgACEBBQgJKEBIQAFCAgoQElCAkIAChAQUICSgACEBBQgJKEBIQAFCAgoQElCAkIAChAQUICSgACEBBQgJKEBIQAFCAgoQElCAkIAChAQUICSgACEBBQgJKEBIQAFCAgoQElCAkIAChAQUICSgACEBBQgJKEBIQAFCAgoQElCAkIAChAQUICSgACEBBQgJKEBIQAFCAgoQElCAkIAChAQUICSgACEBBQgJKEBIQAFCAgoQElCAkIAChP4/d72hGPSrBNkAAAAASUVORK5CYII=" width="672" /></p>
+<p>Tras estudiar algunas de las variables numéricas, se encuentran muchos valores que la función boxplots.stats devuelve como perdidos.</p>
+<pre class="r"><code>boxplot.stats(datos$education.num)$out</code></pre>
+<pre><code>##   [1] 1 2 2 2 2 1 2 2 2 2 2 2 2 2 2 1 1 1 2 1 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 2
+##  [38] 2 2 2 1 1 2 2 2 2 1 2 2 2 2 2 2 2 2 2 1 2 2 2 2 1 2 1 2 2 2 2 2 2 2 2 1 2
+##  [75] 2 2 2 2 2 2 2 2 2 2 1 2 2 2 2 2 1 1 2 2 2 2 2 1 2 2 2 2 2 2 2 2 2 2 1 2 2
+## [112] 2 1 1 2 2 1 2 2 1 2 2 1 2 1 2 2 2 2 2 1 2 1 1 2 1 1 1 2 1 2 1 2 2 1 1 2 2
+## [149] 2 2 1 2 1 2 2 2 2 2 2 2 2 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+## [186] 1 2 2 1 2 1 2 1 2 2 1</code></pre>
+<p>Nos quedaríamos con el estudio de la variable edad, donde efectivamente los valores perdidos se corresponden con edades en las que se podría asumir que la persona ya no está en trabajo activo. El estudio podría establecer no tener en cuenta las filas de estos individuos.</p>
 </div>
 </div>
-<div id="análisis-de-los-datos." class="section level2">
-<h2>4.- Análisis de los datos.</h2>
-<div id="selección-de-los-grupos-de-datos-que-se-quieren-analizarcomparar-planificación-de-los-análisis-a-aplicar." class="section level3">
-<h3>4.1.- Selección de los grupos de datos que se quieren analizar/comparar (planificación de los análisis a aplicar).</h3>
+<div id="análisis-de-los-datos." class="section level3">
+<h3>4.- Análisis de los datos.</h3>
+<div id="selección-de-los-grupos-de-datos-que-se-quieren-analizarcomparar-planificación-de-los-análisis-a-aplicar." class="section level4">
+<h4>4.1.- Selección de los grupos de datos que se quieren analizar/comparar (planificación de los análisis a aplicar).</h4>
+<p>El estudio que interesa es la relación de las distintas variables con el umbral de salario especificado. Así, a priori, se debería realizar análisis de las variables: * age_cat~salary. Cobran más las categorías de edad más elevada que los más jóvenes. * sex~salary. Cobran más los hombres que las mujeres. * race~salary. Cobran más los individuos de raza blanca que los de otras razas.</p>
 </div>
-<div id="comprobación-de-la-normalidad-y-homogeneidad-de-la-varianza." class="section level3">
-<h3>4.2.- Comprobación de la normalidad y homogeneidad de la varianza.</h3>
+<div id="comprobación-de-la-normalidad-y-homogeneidad-de-la-varianza." class="section level4">
+<h4>4.2.- Comprobación de la normalidad y homogeneidad de la varianza.</h4>
+<p>Dado el elevado número de datos, se estudiaría la posibilidad de aplicar el teorema del límite central.</p>
 </div>
-<div id="aplicación-de-pruebas-estadísticas-para-comparar-los-grupos-de-datos.-en-función-de-los-datos-y-el-objetivo-del-estudio-aplicar-pruebas-de-contraste-de-hipótesis-correlaciones-regresiones-etc.-aplicar-al-menos-tres-métodos-de-análisis-diferentes." class="section level3">
-<h3>4.3.- Aplicación de pruebas estadísticas para comparar los grupos de datos. En función de los datos y el objetivo del estudio, aplicar pruebas de contraste de hipótesis, correlaciones, regresiones, etc. Aplicar al menos tres métodos de análisis diferentes.</h3>
+<div id="aplicación-de-pruebas-estadísticas-para-comparar-los-grupos-de-datos.-en-función-de-los-datos-y-el-objetivo-del-estudio-aplicar-pruebas-de-contraste-de-hipótesis-correlaciones-regresiones-etc.-aplicar-al-menos-tres-métodos-de-análisis-diferentes." class="section level4">
+<h4>4.3.- Aplicación de pruebas estadísticas para comparar los grupos de datos. En función de los datos y el objetivo del estudio, aplicar pruebas de contraste de hipótesis, correlaciones, regresiones, etc. Aplicar al menos tres métodos de análisis diferentes.</h4>
+<p>Modelo de regresión lineal múltiple entre age, sex, hours_per_week como variables independientes y salary como variable dependiente.</p>
+<p>Regresión logística para establecer cuál sería la probabilidad de tener un salary de rango inferior.</p>
+<p>Correlación de Pearson o Spearman según la distribución de las variables a estudiar.</p>
 </div>
 </div>
-<div id="representación-de-los-resultados-a-partir-de-tablas-y-gráficas." class="section level2">
-<h2>5.- Representación de los resultados a partir de tablas y gráficas.</h2>
+<div id="representación-de-los-resultados-a-partir-de-tablas-y-gráficas." class="section level3">
+<h3>5.- Representación de los resultados a partir de tablas y gráficas.</h3>
 </div>
-<div id="resolución-del-problema.-a-partir-de-los-resultados-obtenidos-cuáles-son-las-conclusiones-los-resultados-permiten-responder-al-problema" class="section level2">
-<h2>6. Resolución del problema. A partir de los resultados obtenidos, ¿cuáles son las conclusiones? ¿Los resultados permiten responder al problema?</h2>
+<div id="resolución-del-problema.-a-partir-de-los-resultados-obtenidos-cuáles-son-las-conclusiones-los-resultados-permiten-responder-al-problema" class="section level3">
+<h3>6. Resolución del problema. A partir de los resultados obtenidos, ¿cuáles son las conclusiones? ¿Los resultados permiten responder al problema?</h3>
 </div>
-<div id="código-hay-que-adjuntar-el-código-preferiblemente-en-r-con-el-que-se-ha-realizado-la-limpieza-análisis-y-representación-de-los-datos.-si-lo-preferís-también-podéis-trabajar-en-python." class="section level2">
-<h2>7. Código: Hay que adjuntar el código, preferiblemente en R, con el que se ha realizado la limpieza, análisis y representación de los datos. Si lo preferís, también podéis trabajar en Python.</h2>
+<div id="código-hay-que-adjuntar-el-código-preferiblemente-en-r-con-el-que-se-ha-realizado-la-limpieza-análisis-y-representación-de-los-datos.-si-lo-preferís-también-podéis-trabajar-en-python." class="section level3">
+<h3>7. Código: Hay que adjuntar el código, preferiblemente en R, con el que se ha realizado la limpieza, análisis y representación de los datos. Si lo preferís, también podéis trabajar en Python.</h3>
 </div>
 <div id="section" class="section level2">
 <h2>————————————————————————-</h2>
-<div id="inclusión-de-una-variable-secuencial-como-identificador-único-de-cada-fila.-reordenación-de-columnas." class="section level4">
-<h4>Inclusión de una variable secuencial como identificador único de cada fila. Reordenación de columnas.</h4>
-<pre class="r"><code>filas &lt;- nrow (datos)
-
-datos &lt;- cbind (datos, &#39;id&#39; = 1:filas)
-
-names (datos)</code></pre>
-<pre><code>##  [1] &quot;age&quot;            &quot;workclass&quot;      &quot;fnlwgt&quot;         &quot;education&quot;     
-##  [5] &quot;education.num&quot;  &quot;marital.status&quot; &quot;occupation&quot;     &quot;relationship&quot;  
-##  [9] &quot;race&quot;           &quot;sex&quot;            &quot;capital.gain&quot;   &quot;capital.loss&quot;  
-## [13] &quot;hours.per.week&quot; &quot;native.country&quot; &quot;salary&quot;         &quot;id&quot;</code></pre>
-<pre class="r"><code>datos &lt;- subset (datos,
-                 select = c(13,
-                            1,
-                            2,
-                            3,
-                            4,
-                            5,
-                            6,
-                            7,
-                            8,
-                            9,
-                            10,
-                            11,
-                            12))
-
-names (datos)</code></pre>
-<pre><code>##  [1] &quot;hours.per.week&quot; &quot;age&quot;            &quot;workclass&quot;      &quot;fnlwgt&quot;        
-##  [5] &quot;education&quot;      &quot;education.num&quot;  &quot;marital.status&quot; &quot;occupation&quot;    
-##  [9] &quot;relationship&quot;   &quot;race&quot;           &quot;sex&quot;            &quot;capital.gain&quot;  
-## [13] &quot;capital.loss&quot;</code></pre>
-</div>
-<div id="la-segmentación-por-rangos-de-edad-te-permite-establecer-nichos-más-concretos-y-a-profundizar-en-el-estudio." class="section level4">
-<h4>La segmentación por rangos de edad te permite establecer nichos más concretos y a profundizar en el estudio.</h4>
-<p>Establecimiento de categorías de edad para el estudio de empleabilidad vs salario en escalas<br />
-* 0 a 16 años, cat_0<br />
-* 17 a 20, cat_1<br />
-* 21 a 34, cat_2<br />
-* 35 a 45, cat_3<br />
-* 46 a 65, cat_4<br />
-* 65 ~, cat_5</p>
-<p>Fuente <a href="https://www.redalyc.org/journal/706/70666127005/html/" class="uri">https://www.redalyc.org/journal/706/70666127005/html/</a></p>
-<pre class="r"><code>datos &lt;- cbind (datos,
-                age_cat = cut (datos$age,
-                               breaks = c(0,
-                                          16,
-                                          20,
-                                          34,
-                                          45,
-                                          65,
-                                          150),
-                               labels = c(&quot;cat_0&quot;,
-                                          &quot;cat_1&quot;,
-                                          &quot;cat_2&quot;,
-                                          &quot;cat_3&quot;,
-                                          &quot;cat_4&quot;,
-                                          &quot;cat_5&quot;),
-                               right = TRUE
-                               ))</code></pre>
-</div>
 </div>
 
 
