@@ -199,6 +199,17 @@ pre code {
 </ul>
 </div>
 
+<style type="text/css">
+h1 {
+  text-align: center;
+  color: blue;
+  font-weight: bold;
+}
+h2, h3, h4, h5 {
+  color: blue;
+  font-weight: normal;
+}
+</style>
 <div id="preliminares" class="section level3">
 <h3>0.- Preliminares</h3>
 <p>Esta práctica se ha realizado bajo el contexto de la asignatura Tipología y ciclo de vida de los datos (M2.851), perteneciente al Máster en Ciencia de Datos de la Universitat Oberta de Catalunya (UOC). En ella, se aplican técnicas de limpieza y análisis de datos mediante el lenguaje de programación R con el fin de limpiar y analizar un conjunto de datos para después estudiar la probabilidad de alcanzar (o no) cierto umbral de salario en base a los factores personales descritos en el dataset.</p>
@@ -361,13 +372,13 @@ datos &lt;- read.csv (file.choose(),
 ##  $ salary        : chr  &quot; &lt;=50K&quot; &quot; &lt;=50K&quot; &quot; &lt;=50K&quot; &quot; &lt;=50K&quot; ...</code></pre>
 <p>Inspeccionamos 10 observaciones elegidas de manera aleatoria como ejemplo para ilustrar los datos con los que contamos.</p>
 <pre class="r"><code>set.seed(1) 
-datos [sample (nrow (datos), 10), ]</code></pre>
+datos[sample (nrow (datos), 10), ]</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["age"],"name":[1],"type":["int"],"align":["right"]},{"label":["workclass"],"name":[2],"type":["chr"],"align":["left"]},{"label":["fnlwgt"],"name":[3],"type":["int"],"align":["right"]},{"label":["education"],"name":[4],"type":["chr"],"align":["left"]},{"label":["education.num"],"name":[5],"type":["int"],"align":["right"]},{"label":["marital.status"],"name":[6],"type":["chr"],"align":["left"]},{"label":["occupation"],"name":[7],"type":["chr"],"align":["left"]},{"label":["relationship"],"name":[8],"type":["chr"],"align":["left"]},{"label":["race"],"name":[9],"type":["chr"],"align":["left"]},{"label":["sex"],"name":[10],"type":["chr"],"align":["left"]},{"label":["capital.gain"],"name":[11],"type":["int"],"align":["right"]},{"label":["capital.loss"],"name":[12],"type":["int"],"align":["right"]},{"label":["hours.per.week"],"name":[13],"type":["int"],"align":["right"]},{"label":["native.country"],"name":[14],"type":["chr"],"align":["left"]},{"label":["salary"],"name":[15],"type":["chr"],"align":["left"]}],"data":[{"1":"51","2":"Private","3":"441637","4":"HS-grad","5":"9","6":"Married-civ-spouse","7":"Tech-support","8":"Husband","9":"White","10":"Male","11":"0","12":"0","13":"40","14":"United-States","15":"<=50K","_rn_":"17401"},{"1":"38","2":"Private","3":"115289","4":"HS-grad","5":"9","6":"Married-civ-spouse","7":"Machine-op-inspct","8":"Husband","9":"White","10":"Male","11":"0","12":"0","13":"40","14":"United-States","15":"<=50K","_rn_":"24388"},{"1":"30","2":"Private","3":"53158","4":"Assoc-acdm","5":"12","6":"Never-married","7":"Tech-support","8":"Not-in-family","9":"White","10":"Female","11":"0","12":"0","13":"40","14":"United-States","15":"<=50K","_rn_":"4775"},{"1":"38","2":"Private","3":"172538","4":"Bachelors","5":"13","6":"Married-civ-spouse","7":"Tech-support","8":"Husband","9":"White","10":"Male","11":"0","12":"1977","13":"40","14":"United-States","15":">50K","_rn_":"26753"},{"1":"21","2":"Private","3":"200973","4":"Some-college","5":"10","6":"Never-married","7":"Sales","8":"Own-child","9":"White","10":"Female","11":"0","12":"0","13":"20","14":"United-States","15":"<=50K","_rn_":"13218"},{"1":"34","2":"Private","3":"80058","4":"Prof-school","5":"15","6":"Never-married","7":"Exec-managerial","8":"Own-child","9":"White","10":"Male","11":"0","12":"0","13":"50","14":"United-States","15":"<=50K","_rn_":"26109"},{"1":"33","2":"Private","3":"90668","4":"HS-grad","5":"9","6":"Never-married","7":"Adm-clerical","8":"Not-in-family","9":"White","10":"Female","11":"0","12":"0","13":"40","14":"United-States","15":"<=50K","_rn_":"29143"},{"1":"66","2":"Private","3":"185336","4":"HS-grad","5":"9","6":"Widowed","7":"Sales","8":"Other-relative","9":"White","10":"Female","11":"0","12":"0","13":"35","14":"United-States","15":"<=50K","_rn_":"10539"},{"1":"38","2":"Private","3":"108140","4":"Bachelors","5":"13","6":"Never-married","7":"Other-service","8":"Not-in-family","9":"White","10":"Male","11":"0","12":"0","13":"20","14":"United-States","15":"<=50K","_rn_":"8462"},{"1":"28","2":"Private","3":"25955","4":"Assoc-voc","5":"11","6":"Divorced","7":"Craft-repair","8":"Not-in-family","9":"Amer-Indian-Eskimo","10":"Male","11":"0","12":"0","13":"40","14":"United-States","15":"<=50K","_rn_":"4050"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
-<p>Dado el estudio que se pretende hacer, y tras el estudio de las variables, se desestiman para el estudio la ganancia y pérdida de capital. La variable fnlwgt se dejará más adelante en un Análisis de Componentes Principales para ponderar si aporta o no al estudio.</p>
+<p>Dado el estudio que se pretende hacer, y tras el estudio de las variables, se desestiman para la práctica la ganancia y pérdida de capital. La variable fnlwgt se dejará más adelante en un Análisis de Componentes Principales para ponderar si aporta o no al estudio.</p>
 <pre class="r"><code>datos &lt;- dplyr::select (datos,
                         -capital.gain,
                         -capital.loss)
@@ -523,10 +534,6 @@ names (datos)</code></pre>
 <pre><code>## 
 ##  Female    Male 
 ##   10771   21790</code></pre>
-<pre class="r"><code>table (datos$capital.gain)</code></pre>
-<pre><code>## &lt; table of extent 0 &gt;</code></pre>
-<pre class="r"><code>table (datos$capital.loss)</code></pre>
-<pre><code>## &lt; table of extent 0 &gt;</code></pre>
 <pre class="r"><code>table (datos$hours.per.week)</code></pre>
 <pre><code>## 
 ##     1     2     3     4     5     6     7     8     9    10    11    12    13 
@@ -598,7 +605,7 @@ names (datos)</code></pre>
 * workclass<br />
 * occupation<br />
 * country</p>
-<p>Procedemos a sustituirlos. En el proceso de sustitución, encontramos que en todos los valores cadena de las distintas variables se ha insertado al inicio un espacio en blanco, incluido en el valor &quot; ?&quot;.</p>
+<p>Procedemos a sustituirlos. En el proceso de sustitución, encontramos que en todos los valores cadena de las distintas variables se ha insertado al inicio un espacio en blanco, incluido en el valor ” ?“.</p>
 <pre class="r"><code>datos [datos == &quot; ?&quot;] &lt;- NA</code></pre>
 <p>Del total de datos leídos, los valores perdidos son</p>
 <pre class="r"><code>sum(is.na(datos))</code></pre>

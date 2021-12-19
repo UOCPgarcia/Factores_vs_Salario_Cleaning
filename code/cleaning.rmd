@@ -10,6 +10,18 @@ output:
 lang: es-ES
 ---
 
+```{css, echo=FALSE}
+h1 {
+  text-align: center;
+  color: blue;
+  font-weight: bold;
+}
+h2, h3, h4, h5 {
+  color: blue;
+  font-weight: normal;
+}
+```
+
 ### 0.- Preliminares    
     
 Esta práctica se ha realizado bajo el contexto de la asignatura Tipología y ciclo de vida de los datos (M2.851), perteneciente al Máster en Ciencia de Datos de la Universitat Oberta de Catalunya (UOC). En ella, se aplican técnicas de limpieza y análisis de datos mediante el lenguaje de programación R con el fin de limpiar y analizar un conjunto de datos para después estudiar la probabilidad de alcanzar (o no) cierto umbral de salario en base a los factores personales descritos en el dataset.
@@ -53,7 +65,7 @@ Se establece el estudio en torno a un umbral salarial predeterminado. Las person
     
 ### 2.- Integración y selección de los datos de interés a analizar.    
     
-Se inicia la práctica con la lectura del ficheron de datos. Para ello, cargaremos los paquetes necesarios, cuyo número puede irse incrementando conforme avance el desarrollo de la práctica.    
+Se inicia la práctica con la lectura del fichero de datos. Para ello, cargaremos los paquetes necesarios, cuyo número puede irse incrementando conforme avance el desarrollo de la práctica.    
     
 ##### Paquetes utilizados    
     
@@ -65,12 +77,15 @@ La instalación de una librería seguiría los siguientes pasos (ejemplo)
     
 Paquetes utilizados en esta práctica    
     
-* dplyr (manejo de dataframes)    
+* dplyr (manejo de dataframes) 
+* rmarkdown (informe dinámico)
+* nortest (test lillie)
+* ggplot2 (gráficas)    
     
 
 ##### Lectura del fichero   
     
-Se realiza la lectura con la función read.csv, indicando la coma como carácter separador y diciéndole que contamos con una primera fila de cabecera de columnas. A su vez, para mejorar la gestión de los datos, indicamos que las columnas de cadenas de caracteres, visualizados los datos, sean consideradas como tipo factor.   
+Se realiza la lectura con la función read.csv, indicando la coma como carácter separador y diciéndole que contamos con una primera fila de cabecera de columnas.     
     
 ```{r}
 
@@ -98,10 +113,10 @@ Inspeccionamos 10 observaciones elegidas de manera aleatoria como ejemplo para i
     
 ```{r}
 set.seed(1) 
-datos [sample (nrow (datos), 10), ]
+datos[sample (nrow (datos), 10), ]
 ```
     
-Dado el estudio que se pretende hacer, y tras el estudio de las variables, se desestiman para el estudio la ganancia y pérdida de capital. La variable fnlwgt se dejará más adelante en un Análisis de Componentes Principales para ponderar si aporta o no al estudio.
+Dado el estudio que se pretende hacer, y tras el estudio de las variables, se desestiman para la práctica la ganancia y pérdida de capital. La variable fnlwgt se dejará más adelante en un Análisis de Componentes Principales para ponderar si aporta o no al estudio.
     
 ```{r}
 datos <- dplyr::select (datos,
@@ -212,15 +227,7 @@ table (datos$race)
 ```{r}
 table (datos$sex)
 ```
-    
-```{r}
-table (datos$capital.gain)
-```
-    
-```{r}
-table (datos$capital.loss)
-```
-    
+  
 ```{r}
 table (datos$hours.per.week)
 ```
@@ -278,25 +285,22 @@ Con lo que nuestro dataframe ha cambiado de dimensión.
 dim (datos)
 ```
     
-Se cambian las variables que empiezan por un espacio              
+Se cambian las variables que empiezan por un espacio. Se crea una función para ello.                  
     
 ```{r}
-datos$workclass <- trimws(datos$workclass, 
-                          which = c("left"))
-datos$education <- trimws(datos$education, 
-                          which = c("left"))
-datos$marital.status <- trimws(datos$marital.status, 
-                               which = c("left"))
-datos$occupation <- trimws(datos$occupation, 
-                           which = c("left"))
-datos$relationship <- trimws(datos$relationship, 
-                             which = c("left"))
-datos$race <- trimws(datos$race, 
-                     which = c("left"))
-datos$sex <- trimws(datos$sex, 
-                    which = c("left"))
-datos$salary <- trimws(datos$salary, 
-                      which = c("left"))
+ltrim <- function (x) {
+  trimws(x,
+         which = c("left"))
+  }  
+
+datos$workclas <- ltrim (datos$workclass)
+datos$education <- ltrim (datos$education)
+datos$marital.status <- ltrim (datos$marital.status)
+datos$occupation <- ltrim (datos$occupation)
+datos$relationship <- ltrim (datos$relationship)
+datos$race <- ltrim (datos$race)
+datos$sex <- ltrim (datos$sex)
+datos$salary <- ltrim (datos$salary)
 ```
               
 #### 3.2.- Identificación y tratamiento de valores extremos.    
@@ -304,21 +308,31 @@ datos$salary <- trimws(datos$salary,
 Gráficamente    
     
 ```{r}
-boxplot ( datos$age,
-          main="Edad")
+par (mfrow = c(2,3))
+ggplot2::ggplot (data = datos,
+                 aes (y = age)) +                  
+  geom_boxplot (fill = "#4271AE",
+                colour = "#1F3552", 
+                alpha = 0.9,  
+                outlier.colour = "red") +
+  scale_y_continuous (name = "Edad")
+  
+ggplot2::ggplot (data = datos,
+                 aes (y = education.num)) +               
+  geom_boxplot (fill = "#4271AE",
+                colour = "#1F3552", 
+                alpha = 0.9,  
+                outlier.colour = "red") +
+  scale_y_continuous (name = "Años de estudios")  
+
 ```
     
 Por funciones, que nos muestren el valor de los outliers por variable    
     
 ```{r}
 boxplot.stats(datos$age)$out
-```
-       
-```{r}
-boxplot ( datos$education.num,
-          main="Número de años de estudios")
-```
-       
+```     
+    
 Tras estudiar algunas de las variables numéricas, se encuentran muchos valores que la función boxplots.stats devuelve como perdidos.    
     
 ```{r}
@@ -339,10 +353,108 @@ El estudio que interesa es la relación de las distintas variables con el umbral
      
 #### 4.2.- Comprobación de la normalidad y homogeneidad de la varianza.    
     
-Dado el elevado número de datos, se estudiaría la posibilidad de aplicar el teorema del límite central.
+Dado el elevado número de datos, se estudiaría la posibilidad de aplicar el teorema del límite central. También puede usarse un test. Dado el elevado tamaño de la muestra se usará lillie.test. Si el valor de probabilidad (p-value) que obtenemos por la prueba es menor a 0.05 se rechaza la hipótesis nula y los datos no siguen una distribución normal. Si el valor de probabilidad es mayor a 0.05, no se rechazaría la hipótesis nula y los  datos seguirían una distribución normal.    
+    
+```{r}
+nortest::lillie.test (datos$age) 
+```
+    
+El valor p-value del test de Lilliefors es mucho menor al 0.05 por tanto se rechaza la hipótesis nula y se concluye que la variable edad no sigue una distribución normal. Visualmente quedaría    
+    
+    ```{r}
+par (mfrow = c(1,3))
+hist (datos$age)
+hist (datos$age, 
+      freq=F)
+lines (density (datos$age))
+curve (dnorm (x, 
+              mean(datos$age), 
+              sd(datos$age)), 
+       lwd = 2, 
+       col = "blue", 
+       add = T)
+legend("topleft", 
+       c("curva observada", "curva (normal) teórica"),
+       lty = 1, 
+       lwd = 2, 
+       col = c ("black", 
+                "blue"), 
+       bty = "n",
+       cex = 0.8)
+qqnorm (datos$age)
+qqline (datos$age)
+
+```
+        
+```{r}
+nortest::lillie.test (datos$education.num) 
+```    
+    
+El valor p-value del test de Lilliefors es mucho menor al 0.05 por tanto se rechaza la hipótesis nula y se concluye que la variable número de años de estudios no sigue una distribución normal.  Visualmente quedaría    
+    
+    ```{r}
+par (mfrow = c(1,3))
+hist (datos$education.num)
+hist (datos$education.num, 
+      freq=F)
+lines (density (datos$education.num))
+curve (dnorm (x, 
+              mean(datos$education.num), 
+              sd(datos$education.num)), 
+       lwd = 2, 
+       col = "blue", 
+       add = T)
+legend("topleft", 
+       c("curva observada", "curva (normal) teórica"),
+       lty = 1, 
+       lwd = 2, 
+       col = c ("black", 
+                "blue"), 
+       bty = "n",
+       cex = 0.8)
+qqnorm (datos$education.num)
+qqline (datos$education.num)
+
+```    
+            
+```{r}
+nortest::lillie.test (datos$hours.per.week) 
+```    
+    
+El valor p-value del test de Lilliefors es mucho menor al 0.05 por tanto se rechaza la hipótesis nula y se concluye que la variable horas de trabajo a la semana no sigue una distribución normal. Visualmente quedaría    
+    
+    ```{r}
+par (mfrow = c(1,3))
+hist (datos$hours.per.week)
+hist (datos$hours.per.week, 
+      freq=F)
+lines (density (datos$hours.per.week))
+curve (dnorm (x, 
+              mean(datos$hours.per.week), 
+              sd(datos$hours.per.week)), 
+       lwd = 2, 
+       col = "blue", 
+       add = T)
+legend("topleft", 
+       c("curva observada", "curva (normal) teórica"),
+       lty = 1, 
+       lwd = 2, 
+       col = c ("black", 
+                "blue"), 
+       bty = "n",
+       cex = 0.8)
+qqnorm (datos$hours.per.week)
+qqline (datos$hours.per.week)
+
+```       
+            
 
 #### 4.3.- Aplicación de pruebas estadísticas para comparar los grupos de datos. En función de los datos y el objetivo del estudio, aplicar pruebas de contraste de hipótesis, correlaciones, regresiones, etc. Aplicar al menos tres métodos de análisis diferentes.   
    
+Pruebas de carácter visual    
+   
+    
+       
 Modelo de regresión lineal múltiple entre age, sex, hours_per_week como variables independientes y salary como variable dependiente.
 
 Regresión logística para establecer cuál sería la probabilidad de tener un salary de rango inferior.
