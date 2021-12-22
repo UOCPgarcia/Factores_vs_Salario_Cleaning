@@ -172,6 +172,50 @@ datos <- cbind (datos,
 names (datos)
 ```
 
+## Preprocesado - Variables categoricas
+
+Podemos combinar algunos valores categóricos para reducir la dispersión y facilitar los análisis. Especialmente útil en aquellas variables, el reparto de las cuales no ayude o no sea relevante en los análisis, como en el caso del estado civil, dónde la diferencia entre separado y divorciado no aporta nada. 
+
+Marital.status
+```{r}
+datos$marital.status[datos$marital.status=="Never-married"] = "Never-Married"
+datos$marital.status[datos$marital.status=="Married-AF-spouse"] = "Married"
+datos$marital.status[datos$marital.status=="Married-civ-spouse"] = "Married"
+datos$marital.status[datos$marital.status=="Married-spouse-absent"] = "Not-Married"
+datos$marital.status[datos$marital.status=="Separated"] = "Not-Married"
+datos$marital.status[datos$marital.status=="Divorced"] = "Not-Married"
+datos$marital.status[datos$marital.status=="Widowed"] = "Widowed"
+```
+
+workclass
+```{r}
+datos$workclass = gsub("^Federal-gov","Federal-Govt",datos$workclass)
+datos$workclass = gsub("^Local-gov","Other-Govt",datos$workclass)
+datos$workclass = gsub("^State-gov","Other-Govt",datos$workclass)
+datos$workclass = gsub("^Private","Private",datos$workclass)
+datos$workclass = gsub("^Self-emp-inc","Self-Employed",datos$workclass)
+datos$workclass = gsub("^Self-emp-not-inc","Self-Employed",datos$workclass)
+datos$workclass = gsub("^Without-pay","Not-Working",datos$workclass)
+datos$workclass = gsub("^Never-worked","Not-Working",datos$workclass)
+```
+
+occupation
+```{r}
+datos$occupation = gsub("^Adm-clerical","Admin",datos$occupation)
+datos$occupation = gsub("^Armed-Forces","Military",datos$occupation)
+datos$occupation = gsub("^Craft-repair","Blue-Collar",datos$occupation)
+datos$occupation = gsub("^Exec-managerial","White-Collar",datos$occupation)
+datos$occupation = gsub("^Farming-fishing","Blue-Collar",datos$occupation)
+datos$occupation = gsub("^Handlers-cleaners","Blue-Collar",datos$occupation)
+datos$occupation = gsub("^Machine-op-inspct","Blue-Collar",datos$occupation)
+datos$occupation = gsub("^Other-service","Service",datos$occupation)
+datos$occupation = gsub("^Priv-house-serv","Service",datos$occupation)
+datos$occupation = gsub("^Prof-specialty","Professional",datos$occupation)
+datos$occupation = gsub("^Protective-serv","Other-Occupations",datos$occupation)
+datos$occupation = gsub("^Sales","Sales",datos$occupation)
+datos$occupation = gsub("^Tech-support","Other-Occupations",datos$occupation)
+datos$occupation = gsub("^Transport-moving","Blue-Collar",datos$occupation)
+```
     
 ### 3.- Limpieza de los datos.    
      
