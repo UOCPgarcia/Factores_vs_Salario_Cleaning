@@ -227,7 +227,7 @@ table (datos$salary)
 ```
      
 Tras el análisis de las distintas variables, hemos encontrado valores '?', que consideramos como perdidos, en las siguientes variables    
-* age    
+    
 * workclass    
 * occupation    
 * country    
@@ -255,7 +255,13 @@ La media de valores perdidos por columna sería
 apply (is.na (datos),2,mean)
 ```
     
-Lo que es despreciable en el volumen total de datos, por lo que podemos eliminarlos.
+Creamos una categoría Unknown en Native Country.
+
+```{r}    
+datos$native.country[is.na(datos$native.country)] <- "Unknown"
+```
+
+Para las variables workclass y occupation consideramos que son despreciables en el volumen total de datos, por lo que podemos eliminarlos.
     
 ```{r}
 datos <- na.omit(datos)
@@ -324,13 +330,13 @@ Por funciones, que nos muestren el valor de los outliers por variable
 boxplot.stats(datos$age)$out
 ```     
     
-Tras estudiar algunas de las variables numéricas, se encuentran muchos valores que la función boxplots.stats devuelve como perdidos.    
+Tras estudiar algunas de las variables numéricas, se encuentran muchos valores que la función boxplots.stats devuelve como extremos.    
     
 ```{r}
 boxplot.stats(datos$education.num)$out
 ```
     
-Nos quedaríamos con el estudio de la variable edad, donde efectivamente los valores perdidos se corresponden con edades en las que se podría asumir que la persona ya no está en trabajo activo. El estudio podría establecer no tener en cuenta las filas de estos individuos.    
+Nos quedaríamos con el estudio de la variable edad, donde efectivamente los valores extremos se corresponden con edades en las que se podría asumir que la persona ya no está en trabajo activo. El estudio podría establecer no tener en cuenta las filas de estos individuos.    
        
     
 ### 4.- Análisis de los datos.    
