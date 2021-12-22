@@ -81,7 +81,14 @@ Paquetes utilizados en esta práctica
 * rmarkdown (informe dinámico)
 * nortest (test lillie)
 * ggplot2 (gráficas)    
-    
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+library(dplyr)
+library(rmarkdown)
+library(ggplot2)
+library(nortest)
+library(gridExtra)
+```
 
 ##### Lectura del fichero   
     
@@ -281,22 +288,34 @@ Gráficamente
     
 ```{r}
 par (mfrow = c(2,3))
-ggplot2::ggplot (data = datos,
+#Edad
+plotV1 <- ggplot2::ggplot (data = datos,
                  aes (y = age)) +                  
   geom_boxplot (fill = "#4271AE",
                 colour = "#1F3552", 
                 alpha = 0.9,  
                 outlier.colour = "red") +
   scale_y_continuous (name = "Edad")
-  
-ggplot2::ggplot (data = datos,
+
+#Años de estudios
+plotV2 <- ggplot2::ggplot (data = datos,
                  aes (y = education.num)) +               
   geom_boxplot (fill = "#4271AE",
                 colour = "#1F3552", 
                 alpha = 0.9,  
                 outlier.colour = "red") +
-  scale_y_continuous (name = "Años de estudios")  
+  scale_y_continuous (name = "Años de estudios")
 
+#Horas de trabajo
+plotV3 <- ggplot2::ggplot (data = datos,
+                 aes (y = hours.per.week)) +               
+  geom_boxplot (fill = "#4271AE",
+                colour = "#1F3552", 
+                alpha = 0.9,  
+                outlier.colour = "red") +
+  scale_y_continuous (name = "Años de trabajo semanal") 
+
+grid.arrange(plotV1, plotV2, plotV3, ncol=2)
 ```
     
 Por funciones, que nos muestren el valor de los outliers por variable    
