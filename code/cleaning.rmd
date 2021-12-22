@@ -136,20 +136,7 @@ datos <- cbind (datos, 'id' = 1:filas)
 names (datos)
 
 datos <- subset (datos,
-                 select = c(14,
-                            1,
-                            2,
-                            3,
-                            4,
-                            5,
-                            6,
-                            7,
-                            8,
-                            9,
-                            10,
-                            11,
-                            12,
-                            13))
+                 select = c(14,1,2,3,4,5,6,7,8,9,10,11,12,13))
 
 names (datos)
 
@@ -166,24 +153,16 @@ La segmentación por rangos de edad permite establecer nichos más concretos y a
 ```{r}
 datos <- cbind (datos,
                 age_cat = cut (datos$age,
-                               breaks = c(0,
-                                          16,
-                                          20,
-                                          34,
-                                          45,
-                                          65,
-                                          150),
+                               breaks = c(0,16,20,34,45,65,150),
                                labels = c("cat_0",
                                           "cat_1",
                                           "cat_2",
                                           "cat_3",
                                           "cat_4",
                                           "cat_5"),
-                               right = TRUE
-                               ))
+                               right = TRUE))
 
 names (datos)
-
 ```
 
     
@@ -260,17 +239,13 @@ sum(is.na(datos))
 y por columna   
     
 ```{r}
-apply (is.na (datos), 
-       2, 
-       sum)
+apply (is.na (datos),2,sum)
 ```
     
 La media de valores perdidos por columna sería    
     
 ```{r}
-apply (is.na (datos), 
-       2, 
-       mean)
+apply (is.na (datos),2,mean)
 ```
     
 Lo que es despreciable en el volumen total de datos, por lo que podemos eliminarlos.
@@ -288,10 +263,7 @@ dim (datos)
 Se cambian las variables que empiezan por un espacio. Se crea una función para ello.                  
     
 ```{r}
-ltrim <- function (x) {
-  trimws(x,
-         which = c("left"))
-  }  
+ltrim <- function (x) {trimws(x,which = c("left"))}  
 
 datos$workclas <- ltrim (datos$workclass)
 datos$education <- ltrim (datos$education)
