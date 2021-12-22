@@ -486,14 +486,22 @@ legend("topleft",
        cex = 0.8)
 qqnorm (datos$hours.per.week)
 qqline (datos$hours.per.week)
-
 ```       
-            
+ 
+Viendo que nuestros datos no siguen una distribución normal, decidimos normalizar ciertos datos utilizando una normalización Min-Max, para las variables age and hours.per.week.
+
+# Min-Max normalization
+```{r}
+for (i in c(2,12)){
+  mindf = min(datos[,i])
+  maxdf = max(datos[,i])
+  datos[,i] =(datos[,i] - mindf)/(maxdf - mindf)
+}
+```
 
 #### 4.3.- Aplicación de pruebas estadísticas para comparar los grupos de datos. En función de los datos y el objetivo del estudio, aplicar pruebas de contraste de hipótesis, correlaciones, regresiones, etc. Aplicar al menos tres métodos de análisis diferentes.   
    
 Pruebas de carácter visual    
-   
     
        
 Modelo de regresión lineal múltiple entre age, sex, hours_per_week como variables independientes y salary como variable dependiente.
