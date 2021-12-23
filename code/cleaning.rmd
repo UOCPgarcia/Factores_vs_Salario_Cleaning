@@ -553,6 +553,36 @@ cor.test(datos$salary, datos$education.num,  method = "spearman",exact=FALSE)
 cor.test(datos$salary, datos$hours.per.week,  method = "spearman",exact=FALSE)
 ```
 
+## 4.3.2 ¿La probabilidad de tener un salario superior a 50K aumenta si el individuo es un hombre de raza blanca?
+
+Se crea las muestras por sexo.
+```{r}
+datos.male.salary <- datos[datos$sex == "Male",]$salary
+datos.female.salary <- datos[datos$sex == "Female",]$salary
+```
+
+Mann-Whitney test.
+```{r}
+wilcox.test(datos.female.salary, datos.male.salary, alternative = "less")
+```
+
+Se crea las muestras por raza.
+```{r}
+datos.white.salary <- datos[datos$race == "White",]$salary
+datos.black.salary <- datos[datos$race == "Black",]$salary
+datos.asian.salary <- datos[datos$race == "Asian-Pac-Islander",]$salary
+datos.indian.salary <- datos[datos$race == "Amer-Indian-Eskimo",]$salary
+```
+
+Mann-Whitney test.
+```{r}
+wilcox.test(datos.black.salary, datos.white.salary, alternative = "less")
+wilcox.test(datos.asian.salary, datos.white.salary, alternative = "less")
+wilcox.test(datos.indian.salary, datos.white.salary, alternative = "less")
+```
+
+
+
 Pruebas de carácter visual    
     
        
