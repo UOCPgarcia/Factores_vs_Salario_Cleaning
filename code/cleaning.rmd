@@ -171,6 +171,19 @@ datos <- cbind (datos,
 
 names (datos)
 ```
+# Preprocesado -
+
+Cambiar los niveles de ingresos a un valor numérico de 0 o 1 para el modelado de clasificación, incluida la regresión logística 
+```{r}
+datos$salary = gsub("<=50K","0",datos$salary)
+datos$salary = gsub(">50K","1",datos$salary)
+```
+
+Cambiamos el tipo de datos a numérico.
+```{r}
+datos$salary <- as.numeric(datos$salary)-2
+class(datos$salary)
+```
 
 ## Preprocesado - Variables categoricas
 
@@ -322,7 +335,7 @@ Se cambian las variables que empiezan por un espacio. Se crea una función para 
 ```{r}
 ltrim <- function (x) {trimws(x,which = c("left"))}  
 
-datos$workclas <- ltrim (datos$workclass)
+datos$workclass <- ltrim (datos$workclass)
 datos$education <- ltrim (datos$education)
 datos$marital.status <- ltrim (datos$marital.status)
 datos$occupation <- ltrim (datos$occupation)
@@ -386,7 +399,8 @@ Nos quedaríamos con el estudio de la variable edad, donde efectivamente los val
 ### 4.- Análisis de los datos.    
 
 #### 4.1.- Selección de los grupos de datos que se quieren analizar/comparar (planificación de los análisis a aplicar).    
-    
+ 
+ ## Normalidad
 El estudio que interesa es la relación de las distintas variables con el umbral de salario especificado. Así, a priori, se debería realizar análisis de las variables:
 * age_cat~salary. Cobran más las categorías de edad más elevada que los más jóvenes.
 * sex~salary. Cobran más los hombres que las mujeres.
@@ -488,16 +502,47 @@ qqnorm (datos$hours.per.week)
 qqline (datos$hours.per.week)
 ```       
  
+### Normalización (no creo que sea necesario)
 Viendo que nuestros datos no siguen una distribución normal, decidimos normalizar ciertos datos utilizando una normalización Min-Max, para las variables age and hours.per.week.
 
 # Min-Max normalization
-```{r}
-for (i in c(2,12)){
-  mindf = min(datos[,i])
-  maxdf = max(datos[,i])
-  datos[,i] =(datos[,i] - mindf)/(maxdf - mindf)
+```{}
+normalize <- function(x) {
+    return ((x - min(x)) / (max(x) - min(x)))
 }
+
+
+datos$age <- normalize(datos$age)
+datos$hours.per.week <- normalize(datos$hours.per.week)
 ```
+
+```{r}
+summary(datos[, c(2,12)]) 
+```
+
+## Homogeneidad
+
+Implementamos el test de Fligner-Killeen,recordemos que se trata de la alternativa no paramétrica, utilizada cuando los datos no cumplen con la condición de normalidad.
+
+La hipótesis nula asume igualdad de varianzas en los diferentes grupos de datos, por lo que p-valores inferiores al nivel de significancia
+indican heterocedasticidad.
+
+En este caso, estudiaremos las difernecias en la varianza en los grupos de edad, horas semanales y estudios con la probailidad de tener un salario superior a los 50k. 
+
+```{r}
+fligner.test(age ~ salary, data = datos)
+```
+
+```{r}
+fligner.test(hours.per.week ~ salary, data = datos)
+
+```
+
+```{r}
+fligner.test(education.num ~ salary, data = datos)
+
+```
+
 
 #### 4.3.- Aplicación de pruebas estadísticas para comparar los grupos de datos. En función de los datos y el objetivo del estudio, aplicar pruebas de contraste de hipótesis, correlaciones, regresiones, etc. Aplicar al menos tres métodos de análisis diferentes.   
    
