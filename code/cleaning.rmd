@@ -648,6 +648,39 @@ summary(m4)
 
 ### 5.- Representación de los resultados a partir de tablas y gráficas.
 
+
+```{r}
+# edad-income
+ggplot(datosOrigen) + aes(x=as.numeric(age), group=salary, fill=salary) + 
+  geom_histogram(binwidth=1, color='black')
+```
+
+```{r}
+table(datosOrigen$sex,datosOrigen$salary)
+```
+
+```{r}
+qplot(salary, data = datosOrigen, fill = education)+ facet_grid (.~sex)
+```
+
+```{r}
+# años sex-salary
+qplot(salary, data = datosOrigen, fill = education)+ facet_grid (.~sex)
+```
+
+```{r}
+# sex-puesto de trabajo-salary
+qplot(salary, data = datosOrigen, fill = workclass)+ facet_grid (. ~ sex)
+```
+
+```{r}
+# race-salary
+qplot(salary, data = datosOrigen, fill = race)
+
+```
+
+
+
 ### 6. Resolución del problema. A partir de los resultados obtenidos, ¿cuáles son las conclusiones? ¿Los resultados permiten responder al problema?    
     
 ### 7. Código: Hay que adjuntar el código, preferiblemente en R, con el que se ha realizado la limpieza, análisis y representación de los datos. Si lo preferís, también podéis trabajar en Python.          
