@@ -80,7 +80,8 @@ Paquetes utilizados en esta práctica
 * dplyr (manejo de dataframes) 
 * rmarkdown (informe dinámico)
 * nortest (test lillie)
-* ggplot2 (gráficas)    
+* ggplot2 (gráficas)  
+* mlbench (regresión logística)  
 
 ```{r message=FALSE, warning=FALSE, include=FALSE}
 library(dplyr)
@@ -88,6 +89,7 @@ library(rmarkdown)
 library(ggplot2)
 library(nortest)
 library(gridExtra)
+library(mlbench)
 ```
 
 ##### Lectura del fichero   
@@ -581,16 +583,67 @@ wilcox.test(datos.asian.salary, datos.white.salary, alternative = "less")
 wilcox.test(datos.indian.salary, datos.white.salary, alternative = "less")
 ```
 
+## 4.3.3. Modelo de regresión lineal
+
+```{r}
+# Regresores cuantitativos
+educationNum = datos$education.num
+ageIndividual = datos$age
+hoursPerWeek = datos$hours.per.week
+
+# Regresores cualitativos
+sexIndividual = datos$sex
+raceIndividual = datos$race
+workclassInd = datos$workclass
+
+# Variable a predecir
+salary50k = datos$salary
 
 
-Pruebas de carácter visual    
-    
-       
-Modelo de regresión lineal múltiple entre age, sex, hours_per_week como variables independientes y salary como variable dependiente.
+# Generación de varios modelos
+# No age, sex or race
+modelo1 <- lm(salary50k ~ educationNum + hoursPerWeek +workclassInd,
+              data = datos)
+# No sex or race
+modelo2 <- lm(salary50k ~ educationNum + hoursPerWeek + workclassInd +
+                ageIndividual, data = datos)
+# No educationNum
+modelo3 <- lm(salary50k ~ ageIndividual + sexIndividual + raceIndividual +
+                workclassInd + hoursPerWeek, data = datos)
+# No educationNum or workclass
+modelo4 <- lm(salary50k ~ sexIndividual + raceIndividual + hoursPerWeek,
+              data = datos)
+# No education or age
+modelo5 <- lm(salary50k ~ sexIndividual + raceIndividual + workclassInd +
+                hoursPerWeek, data = datos)
+# No education, hours or workclass
+modelo6 <- lm(salary50k ~ ageIndividual + sexIndividual + raceIndividual,
+              data = datos)
+```
 
-Regresión logística para establecer cuál sería la probabilidad de tener un salary de rango inferior.
-    
-Correlación de Pearson o Spearman según la distribución de las variables a estudiar.
+
+```{r}
+# Tabla con los coeficientes de determinación de cada modelo
+tabla.coeficientes <- matrix(c(1, summary(modelo1)$r.squared,
+                               2,summary(modelo2)$r.squared,
+                               3,summary(modelo3)$r.squared,
+                               4,summary(modelo4)$r.squared,
+                               5,summary(modelo5)$r.squared,
+                             6,summary(modelo6)$r.squared),
+                             ncol = 2, byrow = TRUE)
+
+colnames(tabla.coeficientes) <- c("Modelo", "R^2")
+tabla.coeficientes
+```
+## 4.3.4. Modelo de regresión logística
+
+```{r}
+data(datos, package = "mlbench")
+bc <- datos[complete.cases(datos),]
+m4 <- glm(salary50k ~ ageIndividual + educationNum + raceIndividual + sexIndividual + 
+            hoursPerWeek, data= bc, family = "binomial")
+summary(m4)
+```
 
 
 ### 5.- Representación de los resultados a partir de tablas y gráficas.
