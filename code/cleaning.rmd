@@ -140,8 +140,6 @@ filas <- nrow (datos)
 
 datos <- cbind (datos, 'id' = 1:filas)
 
-names (datos)
-
 datos <- subset (datos,
                  select = c(14,1,2,3,4,5,6,7,8,9,10,11,12,13))
 
@@ -169,6 +167,7 @@ datos <- cbind (datos,
                                           "cat_5"),
                                right = TRUE))
 
+datos <- subset (datos,select = c(1,2,15,3,4,5,6,7,8,9,10,11,12,13,14))
 names (datos)
 ```
 # Preprocesado -
@@ -544,8 +543,16 @@ fligner.test(education.num ~ salary, data = datos)
 ```
 
 
-#### 4.3.- Aplicación de pruebas estadísticas para comparar los grupos de datos. En función de los datos y el objetivo del estudio, aplicar pruebas de contraste de hipótesis, correlaciones, regresiones, etc. Aplicar al menos tres métodos de análisis diferentes.   
+#### 4.3.- Aplicación de pruebas estadísticas para comparar los grupos de datos. En función de los datos y el objetivo del estudio, aplicar pruebas de contraste de hipótesis, correlaciones, regresiones, etc. Aplicar al menos tres métodos de análisis diferentes. 
+
+## 4.3.1 ¿Qué variables cuantitativas influyen más en el salario? 
    
+```{r}
+cor.test(datos$salary, datos$age,  method = "spearman",exact=FALSE)
+cor.test(datos$salary, datos$education.num,  method = "spearman",exact=FALSE)
+cor.test(datos$salary, datos$hours.per.week,  method = "spearman",exact=FALSE)
+```
+
 Pruebas de carácter visual    
     
        
