@@ -648,6 +648,7 @@ summary(m4)
 
 ### 5.- Representación de los resultados a partir de tablas y gráficas.
 
+
 Vamos a estudiar la correlación entre los valores del dataset. Como la función de correlación solo funciona con valores numéricos, hemos tenido que hacer un pequeño ajuste, creando un nuevo dataset.
 ```{r message= FALSE, warning=FALSE} 
 datosSalary <- datos[ , c(2,7,13,15)]
@@ -672,30 +673,57 @@ ggplot(unmodifiedDatos) + aes(x=as.numeric(age), group=salary, fill=salary) +
   geom_histogram(binwidth=1, color='black')
 ```
 
+
 ```{r}
-table(unmodifiedDatos$sex,datosOrigen$salary)
+# Sex (percentage) - salary
+visualizacion_Genero <- unmodifiedDatos %>%
+  group_by(salary, sex) %>%
+  tally() %>% complete(sex, fill = list(n = 0)) %>%
+  mutate(percentage = n / sum(n) * 100)
+
+ggplot(visualizacion_Genero, aes(sex, percentage, fill = salary)) +
+  geom_bar(stat = 'identity', position=position_dodge()) +
+  geom_text(aes(label=round(percentage, digits = 1)), vjust=1.6,
+            color="black",position = position_dodge(0.9), size=3.5) +
+  facet_wrap(~ salary)+
+  theme_bw()
 ```
 
 ```{r}
+# Education (percentage) - salary
 qplot(salary, data = unmodifiedDatos, fill = education)+ facet_grid (.~sex)
 ```
 
 ```{r}
-# años sex-salary
-qplot(salary, data = unmodifiedDatos, fill = education)+ facet_grid (.~sex)
+# Workclass (percentage) - salary
+visualizacion_Genero <- unmodifiedDatos %>%
+  group_by(salary, workclass) %>%
+  tally() %>% complete(workclass, fill = list(n = 0)) %>%
+  mutate(percentage = n / sum(n) * 100)
+
+ggplot(visualizacion_Genero, aes(workclass, percentage, fill = salary)) +
+  geom_bar(stat = 'identity', position=position_dodge()) +
+  geom_text(aes(label=round(percentage, digits = 1)), vjust=1,
+            color="black",position = position_dodge(0.9), size=3.5) +
+  facet_wrap(~ salary)+
+  theme_bw()+theme(axis.text.x=element_text(angle=60,hjust=1))
 ```
+
 
 ```{r}
-# sex-puesto de trabajo-salary
-qplot(salary, data = unmodifiedDatos, fill = workclass)+ facet_grid (. ~ sex)
+# Race (percentage) - salary
+visualizacion_Genero <- unmodifiedDatos %>%
+  group_by(salary, race) %>%
+  tally() %>% complete(race, fill = list(n = 0)) %>%
+  mutate(percentage = n / sum(n) * 100)
+
+ggplot(visualizacion_Genero, aes(race, percentage, fill = salary)) +
+  geom_bar(stat = 'identity', position=position_dodge()) +
+  geom_text(aes(label=round(percentage, digits = 1)), vjust=1,
+            color="black",position = position_dodge(0.9), size=3.5) +
+  facet_wrap(~ salary)+
+  theme_bw()+theme(axis.text.x=element_text(angle=60,hjust=1))
 ```
-
-```{r}
-# race-salary
-qplot(salary, data = unmodifiedDatos, fill = race)
-
-```
-
 
 
 ### 6. Resolución del problema. A partir de los resultados obtenidos, ¿cuáles son las conclusiones? ¿Los resultados permiten responder al problema?    
