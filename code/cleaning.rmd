@@ -180,12 +180,6 @@ datos$salary = gsub("<=50K","0",datos$salary)
 datos$salary = gsub(">50K","1",datos$salary)
 ```
 
-Cambiamos el tipo de datos a numérico.
-```{r}
-datos$salary <- as.numeric(datos$salary)-2
-class(datos$salary)
-```
-
 ## Preprocesado - Variables categoricas
 
 Podemos combinar algunos valores categóricos para reducir la dispersión y facilitar los análisis. Especialmente útil en aquellas variables, el reparto de las cuales no ayude o no sea relevante en los análisis, como en el caso del estado civil, dónde la diferencia entre separado y divorciado no aporta nada. 
@@ -345,7 +339,14 @@ datos$race <- ltrim (datos$race)
 datos$sex <- ltrim (datos$sex)
 datos$salary <- ltrim (datos$salary)
 ```
-              
+
+ Cambiamos el tipo de datos a numérico.
+```{r}
+datos$salary <- as.numeric(datos$salary)-2
+class(datos$salary)
+```
+   
+  
 #### 3.2.- Identificación y tratamiento de valores extremos.    
     
 Gráficamente    
