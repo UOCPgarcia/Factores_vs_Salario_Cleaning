@@ -90,6 +90,7 @@ library(ggplot2)
 library(nortest)
 library(gridExtra)
 library(mlbench)
+library(corrplot)
 ```
 
 ##### Lectura del fichero   
@@ -99,11 +100,9 @@ Se realiza la lectura con la función read.csv, indicando la coma como carácter
 ```{r}
 
 # fichero a cargar: ./data/adult_data.csv
-
-datos <- read.csv (file.choose(), 
-                   sep = ",", 
-                   header = TRUE)
-
+datos <- read.csv (file.choose(), sep = ",", header = TRUE)
+                   
+unmodifiedDatos <- read.csv (file = "C:/Users/adria/Downloads/Factores_vs_Salario_Cleaning-main/data/adult_data.csv",sep = ",",header = TRUE)
 ```
     
 ##### Dimensión del conjunto de datos    
@@ -649,34 +648,51 @@ summary(m4)
 
 ### 5.- Representación de los resultados a partir de tablas y gráficas.
 
+Vamos a estudiar la correlación entre los valores del dataset. Como la función de correlación solo funciona con valores numéricos, hemos tenido que hacer un pequeño ajuste, creando un nuevo dataset.
+```{r message= FALSE, warning=FALSE} 
+datosSalary <- datos[ , c(2,7,13,15)]
+```
+
+Convertimos los valores a numéricos.
+```{r message= FALSE, warning=FALSE} 
+datosSalary[] <- lapply(datosSalary, as.numeric)
+```
+
+Creamos el gráfico de correlaciones. 
+```{r message= FALSE, warning=FALSE} 
+cor_matrix <- cor(datosSalary, use = 'complete.obs')
+corrplot.mixed(cor_matrix, lower = "circle", upper = "number", tl.pos = "lt", diag = "u")
+```
+
+
 
 ```{r}
 # edad-income
-ggplot(datosOrigen) + aes(x=as.numeric(age), group=salary, fill=salary) + 
+ggplot(unmodifiedDatos) + aes(x=as.numeric(age), group=salary, fill=salary) + 
   geom_histogram(binwidth=1, color='black')
 ```
 
 ```{r}
-table(datosOrigen$sex,datosOrigen$salary)
+table(unmodifiedDatos$sex,datosOrigen$salary)
 ```
 
 ```{r}
-qplot(salary, data = datosOrigen, fill = education)+ facet_grid (.~sex)
+qplot(salary, data = unmodifiedDatos, fill = education)+ facet_grid (.~sex)
 ```
 
 ```{r}
 # años sex-salary
-qplot(salary, data = datosOrigen, fill = education)+ facet_grid (.~sex)
+qplot(salary, data = unmodifiedDatos, fill = education)+ facet_grid (.~sex)
 ```
 
 ```{r}
 # sex-puesto de trabajo-salary
-qplot(salary, data = datosOrigen, fill = workclass)+ facet_grid (. ~ sex)
+qplot(salary, data = unmodifiedDatos, fill = workclass)+ facet_grid (. ~ sex)
 ```
 
 ```{r}
 # race-salary
-qplot(salary, data = datosOrigen, fill = race)
+qplot(salary, data = unmodifiedDatos, fill = race)
 
 ```
 
