@@ -503,24 +503,6 @@ qqnorm (datos$hours.per.week)
 qqline (datos$hours.per.week)
 ```       
  
-### Normalización (no creo que sea necesario)
-Viendo que nuestros datos no siguen una distribución normal, decidimos normalizar ciertos datos utilizando una normalización Min-Max, para las variables age and hours.per.week.
-
-# Min-Max normalization
-```{}
-normalize <- function(x) {
-    return ((x - min(x)) / (max(x) - min(x)))
-}
-
-
-datos$age <- normalize(datos$age)
-datos$hours.per.week <- normalize(datos$hours.per.week)
-```
-
-```{r}
-summary(datos[, c(2,12)]) 
-```
-
 ## Homogeneidad
 
 Implementamos el test de Fligner-Killeen,recordemos que se trata de la alternativa no paramétrica, utilizada cuando los datos no cumplen con la condición de normalidad.
