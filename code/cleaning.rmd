@@ -638,12 +638,32 @@ tabla.coeficientes
 ## 4.3.4. Modelo de regresión logística
 
 ```{r}
-data(datos, package = "mlbench")
-bc <- datos[complete.cases(datos),]
-m4 <- glm(salary50k ~ ageIndividual + educationNum + raceIndividual + sexIndividual + 
-            hoursPerWeek, data= bc, family = "binomial")
-summary(m4)
+train <- datos
 ```
+
+```{r}
+train <- dplyr::select (train,
+                        -id,-age_cat,-fnlwgt, -education,
+                        -native.country)
+```
+
+```{r}
+set.seed (1000)
+trainCtrl = trainControl (method = "cv", number = 10)
+
+
+regresionModelo = train (salary ~ age + workclass + education.num + 
+                           marital.status + occupation + relationship +
+                           race + sex +hours.per.week,
+                         trControl = trainCtrl,
+                         method = "gbm", data = train, verbose = FALSE)
+```
+
+## Confusion Matrix of Training data
+```{r}
+confusionMatrix (factor(train$salary), predict (regresionModelo, train))
+```
+
 
 
 ### 5.- Representación de los resultados a partir de tablas y gráficas.
