@@ -1,0 +1,786 @@
+---
+title: "Limpieza y análisis de datos"
+author: "Adrià Cortés Andrés - MPilar García Ruiz"
+date: "12/12/2021"
+output:
+  html_document:
+    toc: yes
+    toc_depth: '4'
+    df_print: paged
+lang: es-ES
+---
+
+```{css, echo=FALSE}
+h1 {
+  text-align: center;
+  color: blue;
+  font-weight: bold;
+}
+h2, h3, h4, h5 {
+  color: blue;
+  font-weight: normal;
+}
+```
+
+### 0.- Preliminares    
+    
+Esta práctica se ha realizado bajo el contexto de la asignatura Tipología y ciclo de vida de los datos (M2.851), perteneciente al Máster en Ciencia de Datos de la Universitat Oberta de Catalunya (UOC). En ella, se aplican técnicas de limpieza y análisis de datos mediante el lenguaje de programación R con el fin de limpiar y analizar un conjunto de datos para después estudiar la probabilidad de alcanzar (o no) cierto umbral de salario en base a los factores personales descritos en el dataset.
+    
+#### Miembros del equipo    
+    
+El proyecto ha sido realizado de forma conjunta por:    
+
+- Adrià Cortés Andrés    
+- María Pilar Garcia Ruiz    
+    
+### 1.- Descripción del dataset. ¿Por qué es importante y qué pregunta/problema pretende responder?    
+    
+El conjunto de datos ha sido obtenido de la plataforma kaggle, en la url
+
+![Kaggle: Your Machine Learning and Data Science Community]
+https://www.kaggle.com/ddmasterdon/income-adult?select=adult_data.csv    
+    
+Las variables con las que cuenta el dataset son las siguientes:     
+    
+|Variables|Tipo|Descripción|
+|:---:|:---:|:---:|
+|Age|Numérico|Edad de la persona|
+|workclass|Texto|Clase de empleado. Campo categorizado.|
+|fnlwgt|Numérico|Peso final dado por la oficina que ha recogido los datos y que da el número de unidades en la población objetivo en base a una fórmula no facilitada-|
+|education|Texto|Nivel de estudios. Campo categorizado|
+|education-num|Texto|Años dedicados a los estudios|
+|marital-status|Texto|Situación sentimental. Campo categorizado|
+|occupation|Texto|Trabajo actual|
+|relationship|Texto|Relación familiar actual. Campo categorizado|
+|race|Texto|Raza. Campo categorizado|
+|sex|Texto|Sexo. Campo categorizado|
+|capital-gain|Numérico|Ganancia de capital|
+|capital-loss|Numérico|Pérdida de capital|
+|hours-per-week|Numérico|Horas de trabajo por semana|
+|native-country|Texto|Nacionalidad. Campo categorizado|
+|salary|Lógico|Salario|
+    
+Se escoge este dataset para ver si se puede estudiar qué salario puede alcanzar una persona en base a su pertenencia a un grupo demográfico, con las características descritas en el conjunto de datos. 
+Se establece el estudio en torno a un umbral salarial predeterminado. Las personas que no alcanzan un determinado umbral de sueldo tienen una peor calidad de vida, se encuentran con más dificultad para hacer frente a cualquier eventualidad negativa y esto provoca otras consecuencias. Determinados grupos demográficos pueden convertirse en colectivos más vulnerables de la sociedad. Factores como la raza, el sexo, el nivel de estudios… etc pueden verse con un techo salarial y verse más afectados frente a las crisis económicas.    
+    
+### 2.- Integración y selección de los datos de interés a analizar.    
+    
+Se inicia la práctica con la lectura del fichero de datos. Para ello, cargaremos los paquetes necesarios, cuyo número puede irse incrementando conforme avance el desarrollo de la práctica.    
+    
+##### Paquetes utilizados    
+    
+Se cargan fuera del rmarkdown, por problemas al ejecutar Knit.
+La instalación de una librería seguiría los siguientes pasos (ejemplo)    
+    
+1) install.packages('dplyr')    
+2) library ('dplyr')    
+    
+Paquetes utilizados en esta práctica    
+    
+* dplyr (manejo de dataframes) 
+* rmarkdown (informe dinámico)
+* nortest (test lillie)
+* ggplot2 (gráficas)
+* mlbench (regresión logística)
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+library(dplyr)
+library(rmarkdown)
+library(ggplot2)
+library(nortest)
+library(gridExtra)
+library(mlbench)
+library(corrplot)
+library(tidyr)
+library(caret)
+library(gbm)
+```
+##### Lectura del fichero   
+    
+Se realiza la lectura con la función read.csv, indicando la coma como carácter separador y diciéndole que contamos con una primera fila de cabecera de columnas.     
+    
+```{r}
+
+# fichero a cargar: ./data/adult_data.csv
+
+datos <- read.csv (file = "C:/Users/adria/Downloads/Factores_vs_Salario_Cleaning-main/data/adult_data.csv",sep = ",",header = TRUE)
+
+unmodifiedDatos <- read.csv (file = "C:/Users/adria/Downloads/Factores_vs_Salario_Cleaning-main/data/adult_data.csv",sep = ",",header = TRUE)
+
+```
+    
+##### Dimensión del conjunto de datos    
+    
+```{r}
+dim (datos)
+```
+    
+##### Características de las variables leídas    
+    
+```{r}
+str (datos)
+```
+    
+Inspeccionamos 10 observaciones elegidas de manera aleatoria como ejemplo para ilustrar los datos con los que contamos.   
+    
+```{r}
+set.seed(1) 
+datos[sample (nrow (datos), 10), ]
+```
+    
+Dado el estudio que se pretende hacer, y tras el estudio de las variables, se desestiman para la práctica la ganancia y pérdida de capital. La variable fnlwgt se dejará más adelante en un Análisis de Componentes Principales para ponderar si aporta o no al estudio.
+    
+```{r}
+datos <- dplyr::select (datos,
+                        -capital.gain,
+                        -capital.loss)
+
+str (datos)
+
+```
+Inclusión de una variable secuencial como identificador único de cada fila. Reordenación de columnas.    
+    
+```{r}
+filas <- nrow (datos)
+
+datos <- cbind (datos, 'id' = 1:filas)
+
+datos <- subset (datos,
+                 select = c(14,1,2,3,4,5,6,7,8,9,10,11,12,13))
+
+names (datos)
+
+```
+
+La segmentación por rangos de edad permite establecer nichos más concretos y a profundizar en el estudio. Se establecen categorías de edad para el estudio de empleabilidad vs salario en las siguientes escalas    
+* 0 a 16 años, cat_0    
+* 17 a 20, cat_1    
+* 21 a 34, cat_2    
+* 35 a 45, cat_3    
+* 46 a 65, cat_4    
+* 65 ~, cat_5    
+
+```{r}
+datos <- cbind (datos,
+                age_cat = cut (datos$age,
+                               breaks = c(0,16,20,34,45,65,150),
+                               labels = c("cat_0",
+                                          "cat_1",
+                                          "cat_2",
+                                          "cat_3",
+                                          "cat_4",
+                                          "cat_5"),
+                               right = TRUE))
+
+datos <- subset (datos,
+                 select = c(1,2,15,3,4,5,6,7,8,9,10,11,12,13,14))
+
+names (datos)
+```
+
+# Preprocesado -
+
+Cambiar los niveles de ingresos a un valor numérico de 0 o 1 para el modelado de clasificación, incluida la regresión logística 
+```{r}
+datos$salary = gsub("<=50K","0",datos$salary)
+datos$salary = gsub(">50K","1",datos$salary)
+```
+
+## Preprocesado - Variables categoricas
+
+Podemos combinar algunos valores categóricos para reducir la dispersión y facilitar los análisis. Especialmente útil en aquellas variables, el reparto de las cuales no ayude o no sea relevante en los análisis, como en el caso del estado civil, dónde la diferencia entre separado y divorciado no aporta nada. 
+
+Marital.status
+```{r}
+datos$marital.status[datos$marital.status=="Never-married"] = "Never-Married"
+datos$marital.status[datos$marital.status=="Married-AF-spouse"] = "Married"
+datos$marital.status[datos$marital.status=="Married-civ-spouse"] = "Married"
+datos$marital.status[datos$marital.status=="Married-spouse-absent"] = "Not-Married"
+datos$marital.status[datos$marital.status=="Separated"] = "Not-Married"
+datos$marital.status[datos$marital.status=="Divorced"] = "Not-Married"
+datos$marital.status[datos$marital.status=="Widowed"] = "Widowed"
+```
+
+workclass
+```{r}
+datos$workclass = gsub("^Federal-gov","Federal-Govt",datos$workclass)
+datos$workclass = gsub("^Local-gov","Other-Govt",datos$workclass)
+datos$workclass = gsub("^State-gov","Other-Govt",datos$workclass)
+datos$workclass = gsub("^Private","Private",datos$workclass)
+datos$workclass = gsub("^Self-emp-inc","Self-Employed",datos$workclass)
+datos$workclass = gsub("^Self-emp-not-inc","Self-Employed",datos$workclass)
+datos$workclass = gsub("^Without-pay","Not-Working",datos$workclass)
+datos$workclass = gsub("^Never-worked","Not-Working",datos$workclass)
+```
+
+occupation
+```{r}
+datos$occupation = gsub("^Adm-clerical","Admin",datos$occupation)
+datos$occupation = gsub("^Armed-Forces","Military",datos$occupation)
+datos$occupation = gsub("^Craft-repair","Blue-Collar",datos$occupation)
+datos$occupation = gsub("^Exec-managerial","White-Collar",datos$occupation)
+datos$occupation = gsub("^Farming-fishing","Blue-Collar",datos$occupation)
+datos$occupation = gsub("^Handlers-cleaners","Blue-Collar",datos$occupation)
+datos$occupation = gsub("^Machine-op-inspct","Blue-Collar",datos$occupation)
+datos$occupation = gsub("^Other-service","Service",datos$occupation)
+datos$occupation = gsub("^Priv-house-serv","Service",datos$occupation)
+datos$occupation = gsub("^Prof-specialty","Professional",datos$occupation)
+datos$occupation = gsub("^Protective-serv","Other-Occupations",datos$occupation)
+datos$occupation = gsub("^Sales","Sales",datos$occupation)
+datos$occupation = gsub("^Tech-support","Other-Occupations",datos$occupation)
+datos$occupation = gsub("^Transport-moving","Blue-Collar",datos$occupation)
+```
+
+### 3.- Limpieza de los datos.    
+     
+#### 3.1.- ¿Los datos contienen ceros o elementos vacíos? ¿Cómo gestionarías cada uno de estos casos?    
+    
+Tras un análisis visual, y utilizando rstudio, se localizan datos perdidos. A continuación, pasamos a la revisión de las variables para su análisis y limpieza.    
+    
+```{r}
+table (datos$age)
+```
+    
+```{r}
+table (datos$workclass)
+```
+```{r}
+table (datos$education)
+```
+    
+```{r}
+table (datos$education.num)
+```
+    
+```{r}
+table (datos$marital.status)
+```
+    
+```{r}
+table (datos$occupation)
+```
+    
+```{r}
+table (datos$relationship)
+```
+    
+```{r}
+table (datos$race)
+```
+    
+```{r}
+table (datos$sex)
+```
+  
+```{r}
+table (datos$hours.per.week)
+```
+     
+```{r}
+table (datos$native.country)
+```
+     
+```{r}
+table (datos$salary)
+```
+     
+Tras el análisis de las distintas variables, hemos encontrado valores '?', que consideramos como perdidos, en las siguientes variables    
+* age    
+* workclass    
+* occupation    
+* country    
+    
+Procedemos a sustituirlos. En el proceso de sustitución, encontramos que en todos los valores cadena de las distintas variables se ha insertado al inicio un espacio en blanco, incluido en el valor " ?".    
+    
+```{r}
+datos [datos == " ?"] <- NA
+```
+    
+Del total de datos leídos, los valores perdidos son        
+    
+```{r}
+sum(is.na(datos))
+```
+y por columna   
+    
+```{r}
+apply (is.na (datos),2,sum)
+```
+    
+La media de valores perdidos por columna sería    
+    
+```{r}
+apply (is.na (datos),2,mean)
+```
+
+Creamos una categoría Unknown en Native Country.
+
+```{r}    
+datos$native.country[is.na(datos$native.country)] <- "Unknown"
+```
+
+Para las variables workclass y occupation consideramos que son despreciables en el volumen total de datos, por lo que podemos eliminarlos.
+    
+```{r}
+datos <- na.omit(datos)
+```
+    
+Con lo que nuestro dataframe ha cambiado de dimensión.              
+    
+```{r}
+dim (datos)
+```
+    
+Se cambian las variables que empiezan por un espacio. Se crea una función para ello.                  
+    
+```{r}
+ltrim <- function (x) {trimws(x,which = c("left"))}  
+
+datos$workclass <- ltrim (datos$workclass)
+datos$education <- ltrim (datos$education)
+datos$marital.status <- ltrim (datos$marital.status)
+datos$occupation <- ltrim (datos$occupation)
+datos$relationship <- ltrim (datos$relationship)
+datos$race <- ltrim (datos$race)
+datos$sex <- ltrim (datos$sex)
+datos$salary <- ltrim (datos$salary)
+```
+
+Cambiamos el tipo de datos a numérico.
+```{r}
+datos$salary <- as.numeric(datos$salary)
+class(datos$salary)
+```
+
+              
+#### 3.2.- Identificación y tratamiento de valores extremos.    
+    
+Gráficamente  
+
+Tratamos las variables numéricas.
+    
+```{r}
+par (mfrow = c(2,3))
+#Edad
+plotV1 <- ggplot2::ggplot (data = datos,
+                 aes (y = age)) +                  
+  geom_boxplot (fill = "#4271AE",
+                colour = "#1F3552", 
+                alpha = 0.9,  
+                outlier.colour = "red") +
+  scale_y_continuous (name = "Edad")
+
+#Años de estudios
+plotV2 <- ggplot2::ggplot (data = datos,
+                 aes (y = education.num)) +               
+  geom_boxplot (fill = "#4271AE",
+                colour = "#1F3552", 
+                alpha = 0.9,  
+                outlier.colour = "red") +
+  scale_y_continuous (name = "Años de estudios")
+
+#Horas de trabajo
+plotV3 <- ggplot2::ggplot (data = datos,
+                 aes (y = hours.per.week)) +               
+  geom_boxplot (fill = "#4271AE",
+                colour = "#1F3552", 
+                alpha = 0.9,  
+                outlier.colour = "red") +
+  scale_y_continuous (name = "Años de trabajo semanal") 
+
+grid.arrange(plotV1, plotV2, plotV3, ncol=2)
+```
+    
+Por funciones, que nos muestren el valor de los outliers por variable    
+    
+```{r}
+#Age
+boxplot.stats(datos$age)$out
+#Education
+boxplot.stats(datos$education.num)$out
+# Hours worked per week
+# boxplot.stats(datos$hours.per.week)$out
+```
+
+Nos quedaríamos con el estudio de la variable edad, donde efectivamente los valores extremos se corresponden con edades en las que se podría asumir que la persona ya no está en trabajo activo. El estudio podría establecer no tener en cuenta las filas de estos individuos.    
+       
+    
+### 4.- Análisis de los datos.    
+
+#### 4.1.- Selección de los grupos de datos que se quieren analizar/comparar (planificación de los análisis a aplicar).    
+    
+El estudio que interesa es la relación de las distintas variables con el umbral de salario especificado. Así, a priori, se debería realizar análisis de las variables:
+* age_cat~salary. Cobran más las categorías de edad más elevada que los más jóvenes.
+* sex~salary. Cobran más los hombres que las mujeres.
+* race~salary. Cobran más los individuos de raza blanca que los de otras razas.
+     
+#### 4.2.- Comprobación de la normalidad y homogeneidad de la varianza.    
+    
+## Normalidad
+Dado el elevado número de datos, se estudiaría la posibilidad de aplicar el teorema del límite central. También puede usarse un test. Dado el elevado tamaño de la muestra se usará lillie.test. Si el valor de probabilidad (p-value) que obtenemos por la prueba es menor a 0.05 se rechaza la hipótesis nula y los datos no siguen una distribución normal. Si el valor de probabilidad es mayor a 0.05, no se rechazaría la hipótesis nula y los  datos seguirían una distribución normal.    
+    
+```{r}
+nortest::lillie.test (datos$age) 
+```
+    
+El valor p-value del test de Lilliefors es mucho menor al 0.05 por tanto se rechaza la hipótesis nula y se concluye que la variable edad no sigue una distribución normal. Visualmente quedaría    
+    
+    ```{r}
+par (mfrow = c(1,3))
+hist (datos$age)
+hist (datos$age, 
+      freq=F)
+lines (density (datos$age))
+curve (dnorm (x, 
+              mean(datos$age), 
+              sd(datos$age)), 
+       lwd = 2, 
+       col = "blue", 
+       add = T)
+legend("topleft", 
+       c("curva observada", "curva (normal) teórica"),
+       lty = 1, 
+       lwd = 2, 
+       col = c ("black", 
+                "blue"), 
+       bty = "n",
+       cex = 0.8)
+qqnorm (datos$age)
+qqline (datos$age)
+
+```
+        
+```{r}
+nortest::lillie.test (datos$education.num) 
+```    
+    
+El valor p-value del test de Lilliefors es mucho menor al 0.05 por tanto se rechaza la hipótesis nula y se concluye que la variable número de años de estudios no sigue una distribución normal.  Visualmente quedaría    
+    
+    ```{r}
+par (mfrow = c(1,3))
+hist (datos$education.num)
+hist (datos$education.num, 
+      freq=F)
+lines (density (datos$education.num))
+curve (dnorm (x, 
+              mean(datos$education.num), 
+              sd(datos$education.num)), 
+       lwd = 2, 
+       col = "blue", 
+       add = T)
+legend("topleft", 
+       c("curva observada", "curva (normal) teórica"),
+       lty = 1, 
+       lwd = 2, 
+       col = c ("black", 
+                "blue"), 
+       bty = "n",
+       cex = 0.8)
+qqnorm (datos$education.num)
+qqline (datos$education.num)
+
+```    
+            
+```{r}
+nortest::lillie.test (datos$hours.per.week) 
+```    
+    
+El valor p-value del test de Lilliefors es mucho menor al 0.05 por tanto se rechaza la hipótesis nula y se concluye que la variable horas de trabajo a la semana no sigue una distribución normal. Visualmente quedaría    
+    
+    ```{r}
+par (mfrow = c(1,3))
+hist (datos$hours.per.week)
+hist (datos$hours.per.week, 
+      freq=F)
+lines (density (datos$hours.per.week))
+curve (dnorm (x, 
+              mean(datos$hours.per.week), 
+              sd(datos$hours.per.week)), 
+       lwd = 2, 
+       col = "blue", 
+       add = T)
+legend("topleft", 
+       c("curva observada", "curva (normal) teórica"),
+       lty = 1, 
+       lwd = 2, 
+       col = c ("black", 
+                "blue"), 
+       bty = "n",
+       cex = 0.8)
+qqnorm (datos$hours.per.week)
+qqline (datos$hours.per.week)
+
+```       
+            
+Viendo que nuestros datos no siguen una distribución normal, decidimos normalizar ciertos datos utilizando una normalización Min-Max, para las variables age and hours.per.week.
+
+# Min-Max normalization
+```{}
+normalize <- function(x) {
+    return ((x - min(x)) / (max(x) - min(x)))
+}
+
+
+datos$age <- normalize(datos$age)
+datos$hours.per.week <- normalize(datos$hours.per.week)
+```
+
+```{r}
+summary(datos[, c(2,13)]) 
+```
+
+
+## Homogeneidad
+
+Implementamos el test de Fligner-Killeen,recordemos que se trata de la alternativa no paramétrica, utilizada cuando los datos no cumplen con la condición de normalidad.
+
+La hipótesis nula asume igualdad de varianzas en los diferentes grupos de datos, por lo que p-valores inferiores al nivel de significancia
+indican heterocedasticidad.
+
+En este caso, estudiaremos las difernecias en la varianza en los grupos de edad, horas semanales y estudios con la probailidad de tener un salario superior a los 50k. 
+
+```{r}
+fligner.test(age ~ salary, data = datos)
+```
+
+```{r}
+fligner.test(hours.per.week ~ salary, data = datos)
+
+```
+
+```{r}
+fligner.test(education.num ~ salary, data = datos)
+
+```
+
+
+```{r}
+alpha = 0.05 #asignación del valor alfa
+col.name= colnames(datos)
+print (col.name)
+
+for (i in 1:ncol(datos)) {
+  if (i == 1) cat("Los siguientes atributos no siguen una distribución normal:\n")
+  if (is.integer(datos[,i]) | is.numeric(datos[,i])) {
+    p_val = ad.test(datos[,i])$p.value
+    print(p_val)
+    if (p_val < alpha) {
+      cat(col.name[i])
+      # Format output
+      if (i < ncol(datos) - 1) cat(", ")
+      if (i %% 3 == 0) cat("\n")
+    }
+  }
+}
+
+```
+
+#### 4.3.- Aplicación de pruebas estadísticas para comparar los grupos de datos. En función de los datos y el objetivo del estudio, aplicar pruebas de contraste de hipótesis, correlaciones, regresiones, etc. Aplicar al menos tres métodos de análisis diferentes.   
+   
+## 4.3.1 ¿Qué variables cuantitativas influyen más en el salario? 
+
+```{r}
+cor.test(datos$salary, datos$age,  method = "spearman",exact=FALSE)
+cor.test(datos$salary, datos$education.num,  method = "spearman",exact=FALSE)
+cor.test(datos$salary, datos$hours.per.week,  method = "spearman",exact=FALSE)
+```
+
+## 4.3.2 ¿La probabilidad de tener un salario superior a 50K aumenta si el individuo es un hombre de raza blanca?
+
+Se crea las muestras por sexo.
+```{r}
+datos.male.salary <- datos[datos$sex == "Male",]$salary
+datos.female.salary <- datos[datos$sex == "Female",]$salary
+```
+
+Mann-Whitney test.
+```{r}
+wilcox.test(datos.female.salary, datos.male.salary, alternative = "less")
+```
+
+Se crea las muestras por raza.
+```{r}
+datos.white.salary <- datos[datos$race == "White",]$salary
+datos.black.salary <- datos[datos$race == "Black",]$salary
+datos.asian.salary <- datos[datos$race == "Asian-Pac-Islander",]$salary
+datos.indian.salary <- datos[datos$race == "Amer-Indian-Eskimo",]$salary
+```
+
+Mann-Whitney test.
+```{r}
+wilcox.test(datos.black.salary, datos.white.salary, alternative = "less")
+wilcox.test(datos.asian.salary, datos.white.salary, alternative = "less")
+wilcox.test(datos.indian.salary, datos.white.salary, alternative = "less")
+```
+
+## 4.3.3. Modelo de regresión lineal
+
+```{r}
+# Regresores cuantitativos
+educationNum = datos$education.num
+ageIndividual = datos$age
+hoursPerWeek = datos$hours.per.week
+
+# Regresores cualitativos
+sexIndividual = datos$sex
+raceIndividual = datos$race
+workclassInd = datos$workclass
+
+# Variable a predecir
+salary50k = datos$salary
+
+
+# Generación de varios modelos
+# No age, sex or race
+modelo1 <- lm(salary50k ~ educationNum + hoursPerWeek +workclassInd,
+              data = datos)
+# No sex or race
+modelo2 <- lm(salary50k ~ educationNum + hoursPerWeek + workclassInd +
+                ageIndividual, data = datos)
+# No educationNum
+modelo3 <- lm(salary50k ~ ageIndividual + sexIndividual + raceIndividual +
+                workclassInd + hoursPerWeek, data = datos)
+# No educationNum or workclass
+modelo4 <- lm(salary50k ~ sexIndividual + raceIndividual + hoursPerWeek,
+              data = datos)
+# No education or age
+modelo5 <- lm(salary50k ~ sexIndividual + raceIndividual + workclassInd +
+                hoursPerWeek, data = datos)
+# No education, hours or workclass
+modelo6 <- lm(salary50k ~ ageIndividual + sexIndividual + raceIndividual,
+              data = datos)
+```
+
+
+```{r}
+# Tabla con los coeficientes de determinación de cada modelo
+tabla.coeficientes <- matrix(c(1, summary(modelo1)$r.squared,
+                               2,summary(modelo2)$r.squared,
+                               3,summary(modelo3)$r.squared,
+                               4,summary(modelo4)$r.squared,
+                               5,summary(modelo5)$r.squared,
+                             6,summary(modelo6)$r.squared),
+                             ncol = 2, byrow = TRUE)
+
+colnames(tabla.coeficientes) <- c("Modelo", "R^2")
+tabla.coeficientes
+```
+## 4.3.4. Modelo de regresión logística
+
+```{r}
+train <- datos
+```
+
+```{r}
+train <- dplyr::select (train,
+                        -id,-age_cat,-fnlwgt, -education,
+                        -native.country)
+```
+
+```{r}
+set.seed (1000)
+trainCtrl = trainControl (method = "cv", number = 10)
+
+
+regresionModelo = train (salary ~ age + workclass + education.num + 
+                           marital.status + occupation + relationship +
+                           race + sex +hours.per.week,
+                         trControl = trainCtrl,
+                         method = "gbm", data = train, verbose = FALSE)
+```
+
+## Confusion Matrix of Training data
+```{r}
+confusionMatrix (factor(train$salary), predict (regresionModelo, train))
+```
+
+
+### 5.- Representación de los resultados a partir de tablas y gráficas.
+
+
+Vamos a estudiar la correlación entre los valores del dataset. Como la función de correlación solo funciona con valores numéricos, hemos tenido que hacer un pequeño ajuste, creando un nuevo dataset.
+```{r message= FALSE, warning=FALSE} 
+datosSalary <- datos[ , c(2,7,13,15)]
+```
+
+Convertimos los valores a numéricos.
+```{r message= FALSE, warning=FALSE} 
+datosSalary[] <- lapply(datosSalary, as.numeric)
+```
+
+Creamos el gráfico de correlaciones. 
+```{r message= FALSE, warning=FALSE} 
+cor_matrix <- cor(datosSalary, use = 'complete.obs')
+corrplot.mixed(cor_matrix, lower = "circle", upper = "number", tl.pos = "lt", diag = "u")
+```
+
+
+```{r}
+# edad-income
+ggplot(unmodifiedDatos) + aes(x=as.numeric(age), group=salary, fill=salary) + 
+  geom_histogram(binwidth=1, color='black')
+```
+
+
+```{r}
+# Sex (percentage) - salary
+visualizacion_Genero <- unmodifiedDatos %>%
+  group_by(salary, sex) %>%
+  tally() %>% complete(sex, fill = list(n = 0)) %>%
+  mutate(percentage = n / sum(n) * 100)
+
+ggplot(visualizacion_Genero, aes(sex, percentage, fill = salary)) +
+  geom_bar(stat = 'identity', position=position_dodge()) +
+  geom_text(aes(label=round(percentage, digits = 1)), vjust=1.6,
+            color="black",position = position_dodge(0.9), size=3.5) +
+  facet_wrap(~ salary)+
+  theme_bw()
+```
+
+```{r}
+# Education (percentage) - salary
+qplot(salary, data = unmodifiedDatos, fill = education)+ facet_grid (.~sex)
+```
+
+```{r}
+# Workclass (percentage) - salary
+visualizacion_Genero <- unmodifiedDatos %>%
+  group_by(salary, workclass) %>%
+  tally() %>% complete(workclass, fill = list(n = 0)) %>%
+  mutate(percentage = n / sum(n) * 100)
+
+ggplot(visualizacion_Genero, aes(workclass, percentage, fill = salary)) +
+  geom_bar(stat = 'identity', position=position_dodge()) +
+  geom_text(aes(label=round(percentage, digits = 1)), vjust=1,
+            color="black",position = position_dodge(0.9), size=3.5) +
+  facet_wrap(~ salary)+
+  theme_bw()+theme(axis.text.x=element_text(angle=60,hjust=1))
+```
+
+```{r}
+# Race (percentage) - salary
+visualizacion_Genero <- unmodifiedDatos %>%
+  group_by(salary, race) %>%
+  tally() %>% complete(race, fill = list(n = 0)) %>%
+  mutate(percentage = n / sum(n) * 100)
+
+ggplot(visualizacion_Genero, aes(race, percentage, fill = salary)) +
+  geom_bar(stat = 'identity', position=position_dodge()) +
+  geom_text(aes(label=round(percentage, digits = 1)), vjust=1,
+            color="black",position = position_dodge(0.9), size=3.5) +
+  facet_wrap(~ salary)+
+  theme_bw()+theme(axis.text.x=element_text(angle=60,hjust=1))
+```
+
+
+### 6. Resolución del problema. A partir de los resultados obtenidos, ¿cuáles son las conclusiones? ¿Los resultados permiten responder al problema?    
+    
+### 7. Código: Hay que adjuntar el código, preferiblemente en R, con el que se ha realizado la limpieza, análisis y representación de los datos. Si lo preferís, también podéis trabajar en Python.          
+          
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+
+
+
+
+
