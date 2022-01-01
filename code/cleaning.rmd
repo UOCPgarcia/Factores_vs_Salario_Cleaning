@@ -646,21 +646,29 @@ modelo4 <- lm(salary50k ~ sexIndividual + raceIndividual + hoursPerWeek,
 # No education or age
 modelo5 <- lm(salary50k ~ sexIndividual + raceIndividual + workclassInd +
                 hoursPerWeek, data = datos)
-# No education, hours or workclass
-modelo6 <- lm(salary50k ~ ageIndividual + sexIndividual + raceIndividual,
+# Only education, hours and workclass
+modelo6 <- lm(salary50k ~ educationNum + hoursPerWeek + workclassInd,
               data = datos)
+# Only sex, race and education
+modelo7 <- lm(salary50k ~ educationNum + sexIndividual + raceIndividual,
+              data = datos)
+# Only education
+modelo8 <- lm(salary50k ~ educationNum, data = datos)
 ```
 
 
 ```{r}
 # Tabla con los coeficientes de determinación de cada modelo
-tabla.coeficientes <- matrix(c(1, summary(modelo1)$r.squared,
-                               2,summary(modelo2)$r.squared,
-                               3,summary(modelo3)$r.squared,
-                               4,summary(modelo4)$r.squared,
-                               5,summary(modelo5)$r.squared,
-                             6,summary(modelo6)$r.squared),
-                             ncol = 2, byrow = TRUE)
+tabla.coeficientes <- matrix(c(
+  1, summary(modelo1)$r.squared,
+  2,summary(modelo2)$r.squared,
+  3,summary(modelo3)$r.squared,
+  4,summary(modelo4)$r.squared,
+  5,summary(modelo5)$r.squared,
+  6,summary(modelo6)$r.squared,
+  7,summary(modelo7)$r.squared,
+  8,summary(modelo8)$r.squared),
+  ncol = 2, byrow = TRUE)
 
 colnames(tabla.coeficientes) <- c("Modelo", "R^2")
 tabla.coeficientes
@@ -698,6 +706,26 @@ regresionModelo = train (salary ~ age + workclass + education.num +
 ## Confusion Matrix of Training data
 ```{r}
 confusionMatrix (factor(train$salary), predict (regresionModelo, train))
+```
+
+
+Elaboramos un nuevo modelo.
+```{r}
+set.seed (1001)
+trainCtrl = trainControl (method = "cv", number = 10)
+
+
+regresionModelo2 = train (salary ~ age + workclass + education.num + 
+                           marital.status + occupation + relationship
+                         +hours.per.week,
+                         trControl = trainCtrl,
+                         method = "gbm", data = train, verbose = FALSE)
+```
+
+
+## Confusion Matrix of Training data
+```{r}
+confusionMatrix (factor(train$salary), predict (regresionModelo2, train))
 ```
 
 
