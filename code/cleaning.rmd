@@ -629,6 +629,13 @@ train <- dplyr::select (train,
                         -native.country)
 ```
 
+Cambiamos el tipo de datos a caracter.
+```{r}
+train$salary <- as.character(train$salary)
+class(train$salary)
+```
+
+
 ```{r}
 set.seed (1000)
 trainCtrl = trainControl (method = "cv", number = 10)
