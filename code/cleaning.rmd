@@ -662,6 +662,26 @@ regresionModelo = train (salary ~ age + workclass + education.num +
 confusionMatrix (factor(train$salary), predict (regresionModelo, train))
 ```
 
+Elaboramos un nuevo modelo.
+```{r}
+set.seed (1001)
+trainCtrl = trainControl (method = "cv", number = 10)
+
+
+regresionModelo2 = train (salary ~ age + workclass + education.num + 
+                           marital.status + occupation + relationship
+                         +hours.per.week,
+                         trControl = trainCtrl,
+                         method = "gbm", data = train, verbose = FALSE)
+```
+
+
+## Confusion Matrix of Training data
+```{r}
+confusionMatrix (factor(train$salary), predict (regresionModelo2, train))
+```
+
+
 
 
 ### 5.- Representación de los resultados a partir de tablas y gráficas.
