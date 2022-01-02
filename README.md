@@ -21,17 +21,15 @@ El proyecto ha sido realizado de forma conjunta por:
 
 ## Estructura del repositorio
 
-- README.md este fichero.
-- LICENSE.md licencia utilizada
-- 
-- ./data/practica1_tipologia.pdf memoría del proyecto, con las respuestas a las preguntas planteadas. 
+- ./README.md este fichero.
+- ./LICENSE.md licencia utilizada
+- ./requirements.txt relación de librerías necesarias para la ejecución
+- ./práctica 2_M2.851.pdf memoria del proyecto, con las respuestas a las preguntas planteadas. 
 - ./data/adult_data.csv dataset inicial obtenido de kaggle.
+- ./data/adult_data_processed.csv dataset obtenido tras el procesamiento de la práctica.
 - ./code/cleaning.rmd archivo markdown que contiene el código en r de la práctica.
-- ./code/cleaning.html archivo html que contiene la salida del informe. 
+- ./code/cleaning.html informe dinámico en formato html obtenido del fichero rmd.
+- ./code/cleaning.pdf informe dinámico en formato pdf obtenido del fichero rmd.
 
-### Requirements.txt
-
-
-## DOI 
 
 

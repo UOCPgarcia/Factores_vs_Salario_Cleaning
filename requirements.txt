@@ -1,1 +1,10 @@
-  - dplyr
+- dplyr
+- rmarkdown
+- nortest
+- ggplot2
+- gridExtra
+- mlbench
+- Corrplot
+- Tidyr
+- Caret
+- gbm
