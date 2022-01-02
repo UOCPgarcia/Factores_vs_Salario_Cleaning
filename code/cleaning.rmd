@@ -93,6 +93,7 @@ library (ggplot2)
 library (gridExtra)
 library (mlbench)
 library (corrplot)
+library (Tydir)
 library (caret)
 library (gbm)
 ```
@@ -687,6 +688,8 @@ raceIndividual = datos$race
 workclassInd = datos$workclass
 # Variable a predecir
 salary50k = datos$salary
+
+
 # Generación de varios modelos
 # No age, sex or race
 modelo1 <- lm(salary50k ~ educationNum + 
