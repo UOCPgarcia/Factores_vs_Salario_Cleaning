@@ -461,7 +461,7 @@ plotV3 <- ggplot2::ggplot (data = datos,
                 colour = "#1F3552", 
                 alpha = 0.9,  
                 outlier.colour = "red") +
-  scale_y_continuous (name = "Años de trabajo semanal") 
+  scale_y_continuous (name = "Horas de trabajo semanal") 
 
 grid.arrange (plotV1, 
               plotV2, 
